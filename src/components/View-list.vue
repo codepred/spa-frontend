@@ -64,14 +64,4 @@
 
   <style>
   
-  .divContainer {
-    text-align: center;
-  }
-  h1 {
-    text-align: center;
-    margin-left: +70px;
-  }
-button {
-    margin-left: 10px;
-}
   </style> 

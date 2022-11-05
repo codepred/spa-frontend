@@ -1,5 +1,5 @@
 <template @mouseover="updateLoginButton">
-  <div class="vue-template" @mouseover="updateLoginButton">
+  <div class="vue-template">
     <!-- Navigation -->
     <nav class="navbar shadow bg-white rounded justify-content-between flex-nowrap flex-row fixed-top">
       <div class="container">
@@ -27,31 +27,11 @@
 
  export default {
 
-        data(){
-            return{
-                 showLogoutButton: true
-            }
-        },
-        mounted:function() {
-
-            const checkURL = String(window.location.href)
-            if (checkURL.includes("log-in")) {
-              this.showLogoutButton = false
-            }
-        },
-        methods: {
-          updateLoginButton() {
-            const checkURL = String(window.location.href)
-            if (checkURL.includes("log-in")) {
-              this.showLogoutButton = false
-            }
-            else {
-              this.showLogoutButton = true
-            }
-          },
-          clearSessionStorage () {
-             localStorage.setItem('username', 'ty kurwo');
-          }
+  data() {
+    return {
+      }
+  },
+    methods: {
       }
  }
   
@@ -62,15 +42,22 @@
 
 <style>
 
-div {
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #62478a;
+}
+
+.vertical-center {
     align-self: center;
-    margin-left: auto;
+    width: 100%;
+    block-size: fit-content;
 }
-.vertical-center{
-   position: absolute;
-   top: 50%;
-   left: 50%;
-   transform: translate(-50%, -50%);
+.inner-block {
+  display: inline-block;
 }
+
 
 </style>

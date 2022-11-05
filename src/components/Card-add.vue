@@ -1,30 +1,34 @@
 <template>
   <div class="containerDisplay">
-     <form @submit.prevent="login">
-       <router-link to="/card-employee-view">
-      <button id=exportToPDF class="btn btn-primary float-right">Cofnij</button>
-      </router-link>
-        <h3>Add new user</h3>
-        <div class="display-error" v-if="displayServerError"> Wystąpił problem z serwerem</div>
-        <div class="form-group">
-            <label>First name </label>
-            <input type="text" class="form-control form-control-lg" v-model="firstName" required />   
-        </div> 
-         <div class="form-group">
-            <label>Last name </label>
-            <input type="text" class="form-control form-control-lg" v-model="lastName" required />   
-        </div> 
-         <div class="form-group">
-            <label>Phone numer</label>
-            <input type="text" class="form-control form-control-lg" v-model="email" required />   
-        </div> 
-          <div class="form-group">
-            <label>Email</label>
-            <input type="text" class="form-control form-control-lg" v-model="phoneNumber" required />   
-        </div> 
-
+    <div class="infoTab">
+      <div v-if=displayInfoTab class="displayInfo">
+        <label>
+          <pre>
+            Podany URL musi zawierać:
+          </pre>
+          <pre>
+            - http/https
+          </pre>
+          <pre>
+            - www 
+          </pre>
+          <pre>
+            - domena (.pl/.com/itp.)
+          </pre>
+            Przykład:
+            https://infinite-tech.pl/
+        </label>
+      </div>
+    </div>
+    <form @submit.prevent="login">
+      <div class="form-group">
+        <label>Dodaj link do strony</label>
+        <input type="text" class="form-control form-control-lg" v-model="urlAdress" required />   
+      </div> 
+      <div class="button-panel">
         <button type="submit" v-if="!addingStatus" class="btn btn-dark btn-lg btn-block">Dodaj</button>
         <button type="submit" v-if="addingStatus" class="btn btn-dark btn-lg btn-block">Dodawanie...</button>
+      </div>
     </form>
   </div>
 
@@ -37,41 +41,19 @@
   export default {
   data () {
     return {
-    setDate: false,
-    cardDate: "",
-    cardName: "",
-    cardTRP: "",
-    cardWS: "",
-    cardSerial: "",
-    cardDiameter: "",
-    cardLastname: "",
-    addingStatus: false,
-    displayServerError: false
+      addingStatus: false,
+      displayInfoTab: true,
+      urlAddress: "",
     }
   },
   methods: {
-
-    blockWritting(e) {
-      e.preventDefault()
-    },
-
-    setTodaysDate () {
-          
-      if (this.setDate == false) {
-        const current = new Date();
-        this.cardDate = `${current.getFullYear()}-${(current.getMonth() < 10? '0' : '') + current.getMonth()}-${(current.getMonth() < 10? '0' : '') + current.getMonth()}T${(current.getHours() < 10? '0' : '') + current.getHours()}:${(current.getMinutes() < 10? '0' : '') + current.getMinutes()}`;
-
-        this.setDate = true; 
-        document.getElementById('todaysDate').value = this.cardDate;
-     }
-  },
       async login(e) {
 
-      this.addingStatus = true
-      e.preventDefault();
+        this.addingStatus = true
+        e.preventDefault();
 
-      try {
-      var response = await fetch("http://145.239.80.63:8080/user", {
+        try {
+          var response = await fetch("http://145.239.80.63:8080/user", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -79,46 +61,67 @@
             "Access-Control-Allow-Methods": "*",
             "Access-Control-Allow-Headers": "*"
           },
-          body: JSON.stringify({
-            firstName: this.firstName,
-            lastName: this.lastName,
-            email: this.email,
-            phoneNumber: this.phoneNumber
-          }),
-     }).then(response => response.json())
-      }
-      catch (error) {
-      this.errorMessage = error;
-      console.error('There was an error!', error)
-      const stringError = String(error)
-      this.addingStatus = false
-      if (stringError.includes("Failed to fetch")) {
-        this.displayServerError = true
-
+            body: JSON.stringify({
+              urlAddress: this.urlAddress,
+            }),
+          }).then(response => response.json())
         }
-      }
-      {
-      if(response){
-        console.log('OK')
-        this.$router.push('/card-employee-view')
-      }
-    }
+        catch (error) {
+          this.errorMessage = error;
+          console.error('There was an error!', error)
+          const stringError = String(error)
+          //this.addingStatus = false
+
+          if (stringError.includes("Failed to fetch")) {
+            this.displayServerError = true
+          }
+        }
+        {
+        if (response) {
+          console.log('OK')
+          this.$router.push('/View-list')
+          }
+        }
       }
   }
 }
   
   
-  </script>
+</script>
 
-  <style>
-  
-  .display-error {
-  background-color: #ff0000!important;
-  padding: 10px;
-  margin: auto;
-  border-radius: 10px;
-  color: black;
+<style>
+
+.containerDisplay {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: inline-block;
+    float: none;
+  }
+  .infoTab {
+    text-align: center;
+  }
+
+  #input { 
+    width: 50% !important;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
+    display: inline-block;
+
+  }
+  #button {
+    width: 50% !important;
+    justify-content: center;
+  }
+
+  #app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  color: #62478a;
 }
   
-  </style>
+</style>
