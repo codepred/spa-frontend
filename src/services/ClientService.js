@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const CLIENT_API_BASE_URL = 'http://145.239.80.63:8080/users'
+const CLIENT_API_BASE_URL = 'http://54.37.234.76:8081/company/add'
 
 
 class ClientService{

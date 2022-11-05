@@ -1,6 +1,6 @@
 <template>
     <div class = "containerDisplay">
-      <router-link to="/employee-view-add">
+      <router-link to="">
       <button id=addRecord class="btn btn-primary float-right">Dodaj nowy</button>
       <button id=editRecord class="btn btn-primary float-right">Edytuj</button>
       <button id=removeRecord class="btn btn-primary float-right">Usuń</button>
@@ -8,27 +8,26 @@
       <button id=exportToXML class="btn btn-primary float-left">Eksportuj do Excel</button>
       </router-link>
 
-        <h1 class = "text-center">Rejestr</h1>
+        <h1 class = "text-center">Lista firm</h1>
         <br>
         <br>
         <table class="table table=striped">
             <thead>
                 <th>ID</th>
-                <th>Data</th>
-                <th>Nazwa</th>
-                <th>Opis niezgodności</th>
-                <th>Ilość</th>
-                <th>Przyczyna niezgodności</th>
-                <th>Działania korygujące</th>
-                <th>Ocena działania</th>
+                <th>URL</th>
+                <th>Logo</th>
+                <th>Nr tel.</th>
+                <th>Status</th>
+                <th>Akcje</th>
             </thead>
             <tbody>
                 <tr v-for="client in clients" v-bind:key="client.id">
                     <td>{{client.id}}</td>
-                    <td>{{client.typPr}}</td>
-                    <td>{{client.typWs}}</td>
-                    <td>{{client.numerSeryjny}}</td>
-                    <td>{{client.srednicaNominalnaDN}}</td>
+                    <td>{{client.url}}</td>
+                    <td>{{client.logo}}</td>
+                    <td>{{client.nr}}</td>
+                    <td>{{client.status}}</td>
+                    <td>{{client.akcje}}</td>
                 </tr>
             </tbody>
         </table>

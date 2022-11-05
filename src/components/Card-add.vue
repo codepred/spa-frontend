@@ -1,33 +1,25 @@
 <template>
   <div class="containerDisplay">
+    <h3> Dodaj link do strony </h3>
     <div class="infoTab">
       <div v-if=displayInfoTab class="displayInfo">
         <label>
-          <pre>
-            Podany URL musi zawierać:
-          </pre>
-          <pre>
-            - http/https
-          </pre>
-          <pre>
-            - www 
-          </pre>
-          <pre>
-            - domena (.pl/.com/itp.)
-          </pre>
-            Przykład:
-            https://infinite-tech.pl/
+            Podany URL musi zawierać: <br>
+            - http lub https <br>
+            - domena (.pl lub .com, itp.) <br>
+            <br>
+            Przykład: <br>
+            https://infinite-tech.pl/ <br>
         </label>
       </div>
     </div>
     <form @submit.prevent="login">
       <div class="form-group">
-        <label>Dodaj link do strony</label>
-        <input type="text" class="form-control form-control-lg" v-model="urlAdress" required />   
+        <input type="text" class="form-control-lg" v-model="urlAddress" required />   
       </div> 
       <div class="button-panel">
-        <button type="submit" v-if="!addingStatus" class="btn btn-dark btn-lg btn-block">Dodaj</button>
-        <button type="submit" v-if="addingStatus" class="btn btn-dark btn-lg btn-block">Dodawanie...</button>
+        <button type="submit" v-if="!addingStatus" class="btn btn-dark btn-lg">Dodaj</button>
+        <button type="submit" v-if="addingStatus" class="btn btn-dark btn-lg">Dodawanie...</button>
       </div>
     </form>
   </div>
@@ -43,7 +35,7 @@
     return {
       addingStatus: false,
       displayInfoTab: true,
-      urlAddress: "",
+
     }
   },
   methods: {
@@ -53,7 +45,7 @@
         e.preventDefault();
 
         try {
-          var response = await fetch("http://145.239.80.63:8080/user", {
+          var response = await fetch("http://54.37.234.76:8081/company/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -61,9 +53,9 @@
             "Access-Control-Allow-Methods": "*",
             "Access-Control-Allow-Headers": "*"
           },
-            body: JSON.stringify({
-              urlAddress: this.urlAddress,
-            }),
+          body: JSON.stringify({
+            urlAddress: this.urlAddress,
+          }),
           }).then(response => response.json())
         }
         catch (error) {
@@ -91,6 +83,15 @@
 
 <style>
 
+#pre {
+  padding-top: 0%;
+  padding-bottom: 0%;
+}
+
+.infoTab {
+  padding-bottom: 5%;
+}
+
 .containerDisplay {
     text-align: center;
     align-items: center;
@@ -102,17 +103,24 @@
     text-align: center;
   }
 
-  #input { 
-    width: 50% !important;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-
+input {
+    display: block;
+    width: 50%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
     display: inline-block;
-
-  }
-  #button {
-    width: 50% !important;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+  button {
+    width: 50%;
     justify-content: center;
   }
 
@@ -125,3 +133,7 @@
 }
   
 </style>
+
+
+
+
