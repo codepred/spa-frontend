@@ -54,7 +54,7 @@
             "Access-Control-Allow-Headers": "*"
           },
           body: JSON.stringify({
-            urlAddress: this.urlAddress,
+            url: this.urlAddress,
           }),
           }).then(response => response.json())
         }
