@@ -19,7 +19,15 @@
                     <td><img v-bind:src=client.logoPath /></td>
                     <td>{{client.phoneNumber}}</td>
                     <td>{{client.status}}</td>
-                    <td>{{client.akcje}}</td>
+                    <th>
+                        <button class="btn btn-primary" @click="setAction(0, client.id)">Akceptuję</button>
+                    </th>
+                    <th>
+                        <button class="btn btn-primary" @click="setAction(1, client.id)">Odrzucam</button>
+                    </th>
+                     <th>
+                        <button class="btn btn-primary" @click="removeRecordFunction(2, client.id)">Błąd</button>
+                    </th>
                 </tr>
             </tbody>
         </table>
@@ -39,10 +47,55 @@
             }
         },
         methods: {
-            getClients(){
+            getClients() {
                 ClientService.getClients().then((response) =>{
                     this.clients = response.data;
                 })
+            },
+            setAction(type, id) {
+                if (type === 0) {
+                    //accept
+                }
+                else if (type === 1) {
+                    //not accept
+                }
+                else if (type === 2) {
+                    // bug
+                }
+            },
+            async sendStatusInfo(type, id) {
+
+                try {
+                    var response = await fetch("http://54.37.234.76:8081/company/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
+                    body: JSON.stringify({
+                        type: type,
+                        id: this.id
+                    }),
+                    }).then(response => response.json())
+                    }
+                    catch (error) {
+                    //this.errorMessage = error;
+                    console.error('There was an error!', error)
+                    const stringError = String(error)
+                    //this.addingStatus = false
+
+                    if (stringError.includes("Failed to fetch")) {
+                        this.displayServerError = true
+                        }
+                    }
+                    {
+                    if (response) {
+                    console.log('OK')
+                    this.$router.push('/View-list')
+                        }
+                    }
             }
         },
         created(){
@@ -55,4 +108,8 @@
 
   <style>
   
+    button {
+        text-align: center;
+    }
+
   </style> 

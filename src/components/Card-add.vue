@@ -12,10 +12,20 @@
             https://infinite-tech.pl/ <br>
         </label>
       </div>
+      <div v-if=improperUrl class="display-error">
+        <label>
+          Strona nieprawidłowa
+        </label>
+      </div>
+      <div v-if=duplicatePage class="display-error">
+        <label>
+          Strona jest już dodana
+        </label>
+      </div>
     </div>
     <form @submit.prevent="login">
       <div class="form-group">
-        <input type="text" class="form-control-lg" v-model="urlAddress" required />   
+        <input type="text" class="form-control-lg" v-model="urlAddress" placeholder="URL" required />   
       </div> 
       <div class="button-panel">
         <button type="submit" v-if="!addingStatus" class="btn btn-dark btn-lg">Dodaj</button>
@@ -35,12 +45,14 @@
     return {
       addingStatus: false,
       displayInfoTab: true,
-
+      improperUrl: false,
+      duplicatePage: false
     }
   },
   methods: {
-      async login(e) {
 
+      async login(e) {
+        
         this.addingStatus = true
         e.preventDefault();
 
@@ -62,10 +74,22 @@
           this.errorMessage = error;
           console.error('There was an error!', error)
           const stringError = String(error)
-          //this.addingStatus = false
+          this.addingStatus = false
 
+          if (stringError.includes("COMPANY NOT FOUND")) {
+            this.improperUrl = true
+            this.displayInfoTab = false
+            this.duplicatePage = false
+          }
+          if (stringError.includes("COMPANY EXISTS")) {
+            this.duplicatePage = true
+            this.displayInfoTab = false
+            this.improperUrl = false
+          }
           if (stringError.includes("Failed to fetch")) {
             this.displayServerError = true
+            this.displayInfoTab = false
+            this.imprtoperUrl = false
           }
         }
         {
@@ -75,8 +99,10 @@
           }
         }
       }
-  }
+
+      }
 }
+
   
   
 </script>
@@ -130,6 +156,15 @@ input {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #62478a;
+}
+
+.display-error {
+  color: #ff0000!important;
+  margin: auto;
+  border-radius: 5%;
+  color: black;
+  display: inline-block;
+  text-align: center;
 }
   
 </style>
