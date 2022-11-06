@@ -11,6 +11,9 @@
                 <th>Nr tel.</th>
                 <th>Status</th>
                 <th>Akcje</th>
+
+
+
             </thead>
             <tbody>
                 <tr v-for="client in clients" v-bind:key="client.id">
@@ -20,13 +23,13 @@
                     <td>{{client.phoneNumber}}</td>
                     <td>{{client.status}}</td>
                     <th>
-                        <button class="btn btn-primary" @click="setAction(0, client.id)">Akceptuję</button>
+                        <button class="btn acceptButton" @click="setAction(0, client.id)">Ma ®</button>
                     </th>
                     <th>
-                        <button class="btn btn-primary" @click="setAction(1, client.id)">Odrzucam</button>
+                        <button class="btn declineButton" @click="setAction(1, client.id)">Nie ma ®</button>
                     </th>
                      <th>
-                        <button class="btn btn-primary" @click="removeRecordFunction(2, client.id)">Błąd</button>
+                        <button class="btn bugButton" @click="removeRecordFunction(2, client.id)">Błędna grafika</button>
                     </th>
                 </tr>
             </tbody>
@@ -48,9 +51,21 @@
         },
         methods: {
             getClients() {
-                ClientService.getClients().then((response) =>{
-                    this.clients = response.data;
-                })
+                try {
+                    ClientService.getClients().then((response) =>{
+                        this.errorMessage = error;
+                        console.error('There was an error!', error)
+                        const stringError = String(error)
+                        console.log(stringError)
+                        this.clients = response.data;
+                    })
+                }
+                catch(error) {
+                    console.log("x")
+                    this.errorMessage = error;
+                    console.error('There was an error!', error)
+                    const stringError = String(error)
+                }
             },
             setAction(type, id) {
                 if (type === 0) {
@@ -110,6 +125,22 @@
   
     button {
         text-align: center;
+    }
+
+    .acceptButton {
+        background-color: green;
+        color: white;
+        width: 50%;
+    }
+    .declineButton {
+        background-color: red;
+        color: white;
+        width: 50%;
+    }
+    .bugButton {
+        background-color: orange;
+        color: white;
+        width: 80%;
     }
 
   </style> 

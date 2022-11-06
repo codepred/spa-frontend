@@ -9,7 +9,7 @@
             - domena (.pl lub .com, itp.) <br>
             <br>
             Przykład: <br>
-            https://infinite-tech.pl/ <br>
+            https://pravna.pl/ <br>
         </label>
       </div>
       <div v-if=improperUrl class="display-error">
@@ -20,6 +20,11 @@
       <div v-if=duplicatePage class="display-error">
         <label>
           Strona jest już dodana
+        </label>
+      </div>
+      <div v-if=displayServerError class="display-error">
+        <label>
+          Problem z sewerem
         </label>
       </div>
     </div>
@@ -46,7 +51,8 @@
       addingStatus: false,
       displayInfoTab: true,
       improperUrl: false,
-      duplicatePage: false
+      duplicatePage: false,
+      displayServerError: false
     }
   },
   methods: {
@@ -80,16 +86,20 @@
             this.improperUrl = true
             this.displayInfoTab = false
             this.duplicatePage = false
+            this.displayServerError = false
           }
           if (stringError.includes("COMPANY EXISTS")) {
             this.duplicatePage = true
             this.displayInfoTab = false
             this.improperUrl = false
+            this.displayServerError = false
           }
           if (stringError.includes("Failed to fetch")) {
+            console.log("x")
             this.displayServerError = true
             this.displayInfoTab = false
             this.imprtoperUrl = false
+            this.displayServerError = true
           }
         }
         {
