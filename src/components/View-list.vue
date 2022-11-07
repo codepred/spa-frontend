@@ -1,8 +1,8 @@
 <template>
     <div class = "containerDisplay">
         <h1 class = "text-center">Lista firm</h1>
-        <br>
-        <br>
+        <div v-if="!displayServerError" class="display-error"></div>
+        <div v-if="displayServerError" class="display-error"> Problem z serwerem </div>
         <table class="table table=striped">
             <thead>
                 <th>ID</th>
@@ -11,15 +11,12 @@
                 <th>Nr tel.</th>
                 <th>Status</th>
                 <th>Akcje</th>
-
-
-
             </thead>
             <tbody>
                 <tr v-for="client in clients" v-bind:key="client.id">
                     <td>{{client.id}}</td>
                     <td>{{client.url}}</td>
-                    <td><img v-bind:src=client.logoPath /></td>
+                    <td><img width="200" height="100"  v-bind:src=client.logoPath /></td>
                     <td>{{client.phoneNumber}}</td>
                     <td>{{client.status}}</td>
                     <th>
@@ -29,7 +26,7 @@
                         <button class="btn declineButton" @click="setAction(1, client.id)">Nie ma ®</button>
                     </th>
                      <th>
-                        <button class="btn bugButton" @click="removeRecordFunction(2, client.id)">Błędna grafika</button>
+                        <button class="btn bugButton" @click="setAction(2, client.id)">Błędna grafika</button>
                     </th>
                 </tr>
             </tbody>
@@ -46,27 +43,24 @@
         name: 'clients',
         data(){
             return{
-                 clients : []
+                 clients : [],
+                 displayServerError: false
             }
         },
         methods: {
             getClients() {
-                try {
+                
                     ClientService.getClients().then((response) =>{
-                        this.errorMessage = error;
-                        console.error('There was an error!', error)
-                        const stringError = String(error)
-                        console.log(stringError)
-                        this.clients = response.data;
+                        try {
+                            this.clients = response.data;
+                            this.displayServerError = false
+                        }
+                        catch {
+                            this.displayServerError = true
+                        }
+
                     })
-                }
-                catch(error) {
-                    console.log("x")
-                    this.errorMessage = error;
-                    console.error('There was an error!', error)
-                    const stringError = String(error)
-                }
-            },
+        },
             setAction(type, id) {
                 if (type === 0) {
                     //accept
@@ -125,22 +119,34 @@
   
     button {
         text-align: center;
+        display: inline-block;
+        padding-right: 1%;
     }
-
     .acceptButton {
         background-color: green;
         color: white;
-        width: 50%;
+        width: 100px;
     }
     .declineButton {
         background-color: red;
         color: white;
-        width: 50%;
+        width: 100px;
     }
     .bugButton {
         background-color: orange;
         color: white;
-        width: 80%;
+        width: 140px;
     }
+    h1 {
+        padding-bottom: 2%;
+    }
+    .display-error {
+        color: #ff0000!important;
+        margin: auto;
+        border-radius: 2%;
+        display: inline-block;
+        text-align: center;
+        padding-bottom: 2%;
+}
 
   </style> 

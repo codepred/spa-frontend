@@ -12,6 +12,7 @@
             https://pravna.pl/ <br>
         </label>
       </div>
+      <div v-if=displayInfoTab class="displayInfo"></div>
       <div v-if=improperUrl class="display-error">
         <label>
           Strona nieprawidłowa
@@ -52,7 +53,8 @@
       displayInfoTab: true,
       improperUrl: false,
       duplicatePage: false,
-      displayServerError: false
+      displayServerError: false,
+      httpsMissing: false
     }
   },
   methods: {
@@ -60,7 +62,16 @@
       async login(e) {
         
         this.addingStatus = true
+        this.displayInfoTab = false
+        this.improperUrl = false
+        this.duplicatePage = false
+        this.displayServerError = false
+        this.httpMissing = false
+
         e.preventDefault();
+
+        this.urlAddress = this.urlAddress.replace(/\s/g,'')
+
 
         try {
           var response = await fetch("http://54.37.234.76:8081/company/add", {
@@ -172,7 +183,6 @@ input {
   color: #ff0000!important;
   margin: auto;
   border-radius: 5%;
-  color: black;
   display: inline-block;
   text-align: center;
 }
