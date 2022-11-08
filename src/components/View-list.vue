@@ -10,7 +10,7 @@
                 :selected-label="selectedName"
                 :deselect-label="deselectName"
                 :allow-empty="false"
-                searchable="false"
+                :searchable="false"
             >
             </multiselect>
         </div>
@@ -98,7 +98,6 @@
                 window.open(page)
             },
             getClients() {
-                
                     ClientService.getClients().then((response) =>{
                         try {
                             this.clients = response.data;
@@ -150,7 +149,6 @@
                     }
                     {
                     if (response) {
-                    console.log('OK')
                     this.$router.push('/View-list')
                         }
                     }
