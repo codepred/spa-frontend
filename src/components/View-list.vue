@@ -31,6 +31,7 @@
                 <th>URL</th>
                 <th>Logo</th>
                 <th>Nr tel.</th>
+                <th>Email</th>
                 <th>Status</th>
                 <th>Akcje</th>
             </thead>
@@ -40,9 +41,10 @@
                     <td>{{client.url}}</td>
                     <td>
                         <img class="logoImg" @mouseover="disableInfoIcon('disable')" @mouseleave="disableInfoIcon('enable')" v-bind:src=client.logoPath />
-                        <img class="redirectToLogo" v-if="displayInfoIcon" @click="redirectToLogoPage(client.logoPath)" width="15" height="15" src='../img/info_icon.svg' />
+                        <img class="redirectToLogo" v-if="displayInfoIcon" @click="redirectToLogoPage(client.logoPath)" width="17" height="17" src='../img/info_icon.svg' />
                     </td>
                     <td>{{client.phoneNumber}}</td>
+                    <td>{{client.email}}</td>
                     <td>{{client.status}}</td>
                     <th>
                         <button class="btn acceptButton" @click="setAction(0, client.id)">Ma ®</button>
@@ -63,6 +65,10 @@
   <script>
   import ClientService from '../services/ClientService'
   import Multiselect from 'vue-multiselect'
+
+  var selectedFilter = "WSZYSTKIE"
+
+  export { selectedFilter }
   
  
 
@@ -77,27 +83,30 @@
                  clients : [],
                  selectedFilter: "WSZYSTKIE",
                  displayServerError: false,
-                 options: ["WSZYSTKIE","OCZEKUJE", "MA_R", "NIE_MA_R", "BLEDNA_GRAFIKA"],
+                 options: ["WSZYSTKIE", "OCZEKUJE", "MA_R", "NIE_MA_R", "BLEDNA_GRAFIKA"],
                  selectName: "Wybierz",
                  deselectName: "Wybrane",
                  selectedName: "Wybrane",
-                 displayInfoIcon: false,
+                 displayInfoIcon: true,
                  pageNumber: 1,
            }
+        },
+        watch: {
+            selectedFilter(newOption, oldOption) {this.getClients()}
         },
         methods: {
             disableInfoIcon(argument) {
                 if (argument === "disable") {
-                    this.disableInfoIcon = false
+                    this.displayInfoIcon = false
                 }
                 if (argument === "enable") {
-                    this.disableInfoIcon = true
+                    this.displayInfoIcon = true
                 }
             },
             redirectToLogoPage(page) {
                 window.open(page)
             },
-            getClients() {
+            getClients(selectedFilter) {
                     ClientService.getClients().then((response) =>{
                         try {
                             this.clients = response.data;
@@ -108,22 +117,25 @@
                         }
 
                     })
-        },
+            },
             setAction(type, id) {
                 if (type === 0) {
                     //accept
+                    this.sendStatusInfo("MA_R", id)
                 }
                 else if (type === 1) {
                     //not accept
+                    this.sendStatusInfo("NIE_MA_R", id)
                 }
                 else if (type === 2) {
                     // bug
+                    this.sendStatusInfo("BLEDNA_GRAFIKA", id)
                 }
             },
-            async sendStatusInfo(type, id) {
+            async sendStatusInfo(status, id) {
 
                 try {
-                    var response = await fetch("http://54.37.234.76:8081/company/add", {
+                    var response = await fetch("http://54.37.234.76:8081/company/status", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -132,8 +144,8 @@
                         "Access-Control-Allow-Headers": "*"
                     },
                     body: JSON.stringify({
-                        type: type,
-                        id: this.id
+                        status: status,
+                        id: id
                     }),
                     }).then(response => response.json())
                     }
@@ -147,15 +159,11 @@
                         this.displayServerError = true
                         }
                     }
-                    {
-                    if (response) {
-                    this.$router.push('/View-list')
-                        }
-                    }
+                    this.getClients(this.selectedFilter)
             }
         },
         created(){
-            this.getClients()
+            this.getClients(this.selectedFilter)
         }
     }
   
@@ -204,6 +212,8 @@
     .logoImg {
         width: 200px; 
         height: 100px;
+        padding: 10%;
+        margin: auto;
     }
     .logoImg:hover {
         width: 100%;
@@ -218,7 +228,7 @@
         display: inline-block;
     }
     .setPagination {
-        width: 20%;
+        width: 25%;
         float: right;
     }
 
