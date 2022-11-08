@@ -92,7 +92,10 @@
            }
         },
         watch: {
-            selectedFilter(newOption, oldOption) {this.getClients()}
+            selectedFilter(newOption, oldOption) {
+                localStorage.setItem('filter', this.selectedFilter)
+                this.getClients()
+            }
         },
         methods: {
             disableInfoIcon(argument) {
