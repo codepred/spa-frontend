@@ -9,7 +9,7 @@
                 :select-label="selectName"
                 :selected-label="selectedName"
                 :allow-empty="false"
-                searchable=false
+                :searchable="false"
             >
             </multiselect>
         </div>
@@ -84,9 +84,11 @@
                 window.open(page)
             },
             getClients() {
-                
+                console.log('POBRANIE KLIENTOW')
                     ClientService.getClients().then((response) =>{
                         try {
+                            console.log('POBRANIE KLIENTOW1')
+                            console.log(response.data)
                             this.clients = response.data;
                             this.displayServerError = false
                         }
