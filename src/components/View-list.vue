@@ -8,10 +8,20 @@
                 placeholder="Wybierz filtr"
                 :select-label="selectName"
                 :selected-label="selectedName"
+                :deselect-label="deselectName"
                 :allow-empty="false"
                 :searchable="false"
             >
             </multiselect>
+        </div>
+        <div class="setPagination">
+            <input class="form-control-lg"
+                type="number"
+                min="1"
+                max="100"
+                v-model="pageNumber"
+                placeholder="Wybierz stronę"
+            />
         </div>
         <div v-if="!displayServerError" class="display-error"></div>
         <div v-if="displayServerError" class="display-error"> Problem z serwerem </div>
@@ -29,8 +39,8 @@
                     <td>{{client.id}}</td>
                     <td>{{client.url}}</td>
                     <td>
-                        <img class="logoImg" v-bind:src=client.logoPath />
-                        <img class="redirectToLogo" @click="redirectToLogoPage(client.logoPath)" width="15" height="15" src='../img/info_icon.svg' />
+                        <img class="logoImg" @mouseover="disableInfoIcon('disable')" @mouseleave="disableInfoIcon('enable')" v-bind:src=client.logoPath />
+                        <img class="redirectToLogo" v-if="displayInfoIcon" @click="redirectToLogoPage(client.logoPath)" width="15" height="15" src='../img/info_icon.svg' />
                     </td>
                     <td>{{client.phoneNumber}}</td>
                     <td>{{client.status}}</td>
@@ -67,18 +77,22 @@
                  clients : [],
                  selectedFilter: "WSZYSTKIE",
                  displayServerError: false,
-                 perPage: 2,
-                 currentPage: 1,
-                 rows: 20, 
                  options: ["WSZYSTKIE","OCZEKUJE", "MA_R", "NIE_MA_R", "BLEDNA_GRAFIKA"],
                  selectName: "Wybierz",
-                 deselectName: "Usuń",
-                 selectedName: "Wybrane"
+                 deselectName: "Wybrane",
+                 selectedName: "Wybrane",
+                 displayInfoIcon: false,
+                 pageNumber: 1,
            }
         },
         methods: {
-            test() {
-                console.log(this.selectedFilter)
+            disableInfoIcon(argument) {
+                if (argument === "disable") {
+                    this.disableInfoIcon = false
+                }
+                if (argument === "enable") {
+                    this.disableInfoIcon = true
+                }
             },
             redirectToLogoPage(page) {
                 window.open(page)
@@ -202,6 +216,10 @@
     .redirectToLogo:hover {
         cursor: pointer;
         display: inline-block;
+    }
+    .setPagination {
+        width: 20%;
+        float: right;
     }
 
   </style> 
