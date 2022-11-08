@@ -84,11 +84,8 @@
                 window.open(page)
             },
             getClients() {
-                console.log('POBRANIE KLIENTOW')
                     ClientService.getClients().then((response) =>{
                         try {
-                            console.log('POBRANIE KLIENTOW1')
-                            console.log(response.data)
                             this.clients = response.data;
                             this.displayServerError = false
                         }
@@ -138,7 +135,6 @@
                     }
                     {
                     if (response) {
-                    console.log('OK')
                     this.$router.push('/View-list')
                         }
                     }
