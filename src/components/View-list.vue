@@ -1,6 +1,18 @@
 <template>
     <div class = "containerDisplay">
         <h1 class = "text-center">Lista firm</h1>
+        <div class="filtersTab" @click="test">
+            <multiselect 
+                v-model="selectedFilter" 
+                :options="options"
+                placeholder="Wybierz filtr"
+                :select-label="selectName"
+                :selected-label="selectedName"
+                :allow-empty="false"
+                searchable=false
+            >
+            </multiselect>
+        </div>
         <div v-if="!displayServerError" class="display-error"></div>
         <div v-if="displayServerError" class="display-error"> Problem z serwerem </div>
         <table class="table table=striped">
@@ -40,17 +52,34 @@
 
   <script>
   import ClientService from '../services/ClientService'
+  import Multiselect from 'vue-multiselect'
   
+ 
+
    export default {
         /* eslint-disable */
+        components: {
+            Multiselect
+        },
         name: 'clients',
         data(){
             return{
                  clients : [],
-                 displayServerError: false
-            }
+                 selectedFilter: "WSZYSTKIE",
+                 displayServerError: false,
+                 perPage: 2,
+                 currentPage: 1,
+                 rows: 20, 
+                 options: ["WSZYSTKIE","OCZEKUJE", "MA_R", "NIE_MA_R", "BLEDNA_GRAFIKA"],
+                 selectName: "Wybierz",
+                 deselectName: "Usuń",
+                 selectedName: "Wybrane"
+           }
         },
         methods: {
+            test() {
+                console.log(this.selectedFilter)
+            },
             redirectToLogoPage(page) {
                 window.open(page)
             },
@@ -121,8 +150,14 @@
   
   </script>
 
+<style src="../assets/css/vue-multiselect.min.css"></style>
+
   <style>
   
+    .filtersTab {
+        width: 15%;
+        list-style-type: none;
+    }
     button {
         text-align: center;
         display: inline-block;
