@@ -16,7 +16,10 @@
                 <tr v-for="client in clients" v-bind:key="client.id">
                     <td>{{client.id}}</td>
                     <td>{{client.url}}</td>
-                    <td><img width="200" height="100"  v-bind:src=client.logoPath /></td>
+                    <td>
+                        <img class="logoImg" v-bind:src=client.logoPath />
+                        <img class="redirectToLogo" @click="redirectToLogoPage(client.logoPath)" width="15" height="15" src='../img/info_icon.svg' />
+                    </td>
                     <td>{{client.phoneNumber}}</td>
                     <td>{{client.status}}</td>
                     <th>
@@ -48,6 +51,9 @@
             }
         },
         methods: {
+            redirectToLogoPage(page) {
+                window.open(page)
+            },
             getClients() {
                 
                     ClientService.getClients().then((response) =>{
@@ -147,6 +153,22 @@
         display: inline-block;
         text-align: center;
         padding-bottom: 2%;
-}
+    }
+    .logoImg {
+        width: 200px; 
+        height: 100px;
+    }
+    .logoImg:hover {
+        width: 100%;
+        height: 100%;
+    }
+    .redirectToLogo {
+        display: inline-block;
+        margin: auto;
+    }
+    .redirectToLogo:hover {
+        cursor: pointer;
+        display: inline-block;
+    }
 
   </style> 
