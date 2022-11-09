@@ -1,5 +1,5 @@
 <template>
-    <div class = "containerDisplay">
+    <div class = "container-display">
         <h1 class = "text-center">Lista firm</h1>
         <div class="filtersTab" @click="test">
             <multiselect 
@@ -21,6 +21,7 @@
                 max="100"
                 v-model="pageNumber"
                 placeholder="Wybierz stronę"
+                @click="setPage"
             />
         </div>
         <div v-if="!displayServerError" class="display-error"></div>
@@ -98,6 +99,10 @@
             }
         },
         methods: {
+            setPage() {
+                // pass
+            },
+
             disableInfoIcon(argument) {
                 if (argument === "disable") {
                     this.displayInfoIcon = false
@@ -176,7 +181,15 @@
 <style src="../assets/css/vue-multiselect.min.css"></style>
 
   <style>
-  
+    .container-display {
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        display: inline-block;
+        float: none;
+        width: 100%;
+    }
+
     .filtersTab {
         width: 15%;
         list-style-type: none;
@@ -211,6 +224,7 @@
         display: inline-block;
         text-align: center;
         padding-bottom: 2%;
+        list-style-type: none;
     }
     .logoImg {
         width: 200px; 
