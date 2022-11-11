@@ -51,10 +51,13 @@
 }
 
 .vertical-center {
-    align-self: center;
-    width: 100%;
-    block-size: fit-content;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
 }
+
+
 .inner-block {
   display: inline-block;
 }
