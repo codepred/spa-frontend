@@ -12,7 +12,6 @@
             https://pravna.pl/ <br>
         </label>
       </div>
-      <div v-if=displayInfoTab class="displayInfo"></div>
       <div v-if=improperUrl class="display-error">
         <label>
           Strona nieprawidłowa
@@ -38,6 +37,15 @@
         <button type="submit" v-if="addingStatus" class="btn btn-dark btn-lg">Dodawanie...</button>
       </div>
     </form>
+    <div class="setPagination">
+      <input 
+        type="file"
+        id="avatar" 
+        name="avatar"
+        accept=".txt, .csv"
+        @click="sendFile()"
+        />
+      </div>
   </div>
 
   </template>
@@ -49,6 +57,7 @@
   export default {
   data () {
     return {
+      urlAddress: "",
       addingStatus: false,
       displayInfoTab: true,
       improperUrl: false,
@@ -62,11 +71,19 @@
       async login(e) {
         
         this.addingStatus = true
-        this.displayInfoTab = false
         this.improperUrl = false
         this.duplicatePage = false
         this.displayServerError = false
         this.httpMissing = false
+
+        if (!this.urlAddress.includes('http') || !this.urlAddress.includes('.')) {
+          this.improperUrl = true
+          this.addingStatus = false
+          return
+        }
+
+
+
 
         e.preventDefault();
 
@@ -173,21 +190,28 @@ input {
   }
 
   #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #62478a;
-}
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #62478a;
+  }
 
-.display-error {
-  color: #ff0000!important;
-  margin: auto;
-  border-radius: 5%;
-  display: inline-block;
-  text-align: center;
-}
-  
+  .display-error {
+    color: #ff0000!important;
+    margin: auto;
+    border-radius: 5%;
+    display: inline-block;
+    text-align: center;
+    padding-top: 1%;
+  }
+
+  .setPagination {
+        width: 25%;
+        float: right;
+        padding: 2%;
+    }
+
 </style>
 
 
