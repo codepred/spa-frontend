@@ -115,8 +115,9 @@
                 console.log(this.pageNumber)
                 console.log(event)
 
-                if (this.pageNumber < 1 || this.pageNumber === null || this.pageNumber === undefined) {
+                if (this.pageNumber < 1 || this.pageNumber === null || this.pageNumber === undefined || this.pageNumber === "" || isNaN()) {
                     this.displayWrongPageNumberError = true
+                    this.displayNumberOfElementsError = false
                     return
                 }
                 this.displayWrongPageNumberError = false 
@@ -171,13 +172,8 @@
                             this.clients = response.data.content;
                             this.displayServerError = false
                             this.displayNumberOfElementsError = false
-                        }
-                        catch {
-                            this.displayServerError = true
-                            this.displayEmptyListError = false
-                            this.displayNumberOfElementsError = false
-                        }
-                        if (response.data.totalElements === 0) {
+
+                            if (response.data.totalElements === 0) {
                             this.displayEmptyListError = true
                             this.displayServerError = false
                             this.displayNumberOfElementsError = false
@@ -185,7 +181,13 @@
                         if (response.data.totalElements !== 0 && response.data.numberOfElements === 0) {
                             this.displayNumberOfElementsError = true
                             this.displayEmptyListError = false
-                    }
+                        }
+                        }
+                        catch {
+                            this.displayServerError = true
+                            this.displayEmptyListError = false
+                            this.displayNumberOfElementsError = false
+                        }
                     })
             },
             setAction(type, id) {
