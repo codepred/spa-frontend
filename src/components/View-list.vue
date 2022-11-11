@@ -21,11 +21,18 @@
                 max="100"
                 v-model="pageNumber"
                 placeholder="Wybierz stronę"
-                @click="setPage"
+                v-on:change="setPage"
+                v-on:keydown="setPage"
             />
         </div>
         <div v-if="!displayServerError" class="display-error"></div>
         <div v-if="displayServerError" class="display-error"> Problem z serwerem </div>
+        <div v-if="!displayEmptyListError" class="display-error"></div>
+        <div v-if="displayEmptyListError" class="display-error"> Baza danych jest pusta </div>
+        <div v-if="!displayNumberOfElementsError" class="display-error"></div>
+        <div v-if="displayNumberOfElementsError" class="display-error"> Nie można zmienić strony </div>
+        <div v-if="!displayWrongPageNumberError" class="display-error"></div>
+        <div v-if="displayWrongPageNumberError" class="display-error"> Wpisano niepoprawny numer strony </div>
         <table class="table table=striped">
             <thead>
                 <th>ID</th>
@@ -47,15 +54,17 @@
                     <td>{{client.phoneNumber}}</td>
                     <td>{{client.email}}</td>
                     <td>{{client.status}}</td>
-                    <th>
-                        <button class="btn acceptButton" @click="setAction(0, client.id)">Ma ®</button>
-                    </th>
-                    <th>
-                        <button class="btn declineButton" @click="setAction(1, client.id)">Nie ma ®</button>
-                    </th>
-                     <th>
-                        <button class="btn bugButton" @click="setAction(2, client.id)">Błędna grafika</button>
-                    </th>
+                    <div v-if="client.status === 'OCZEKUJE'">
+                        <th>
+                            <button class="btn acceptButton" @click="setAction(0, client.id)">Ma ®</button>
+                        </th>
+                        <th>
+                            <button class="btn declineButton" @click="setAction(1, client.id)">Nie ma ®</button>
+                        </th>
+                        <th>
+                            <button class="btn bugButton" @click="setAction(2, client.id)">Błędna grafika</button>
+                        </th>
+                    </div>
                 </tr>
             </tbody>
         </table>
@@ -89,6 +98,9 @@
                  deselectName: "Wybrane",
                  selectedName: "Wybrane",
                  displayInfoIcon: true,
+                 displayEmptyListError: false,
+                 displayNumberOfElementsError: false,
+                 displayWrongPageNumberError: false,
                  pageNumber: 1,
            }
         },
@@ -99,10 +111,49 @@
             }
         },
         methods: {
-            setPage() {
-                // pass
-            },
+            async setPage(event) {
+                console.log(this.pageNumber)
+                console.log(event)
 
+                if (this.pageNumber < 1 || this.pageNumber === null || this.pageNumber === undefined) {
+                    this.displayWrongPageNumberError = true
+                    return
+                }
+                this.displayWrongPageNumberError = false 
+
+
+                localStorage.setItem('pageNumber', this.pageNumber)
+
+                try {
+                    var response = await fetch("http://54.37.234.76:8081/company/list", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "*",
+                        "Access-Control-Allow-Headers": "*"
+                    },
+                    body: JSON.stringify({
+                        token: localStorage.getItem('token'),
+                        status: this.selectedFilter,
+                        pageNumber: this.pageNumber
+                    }),
+                    }).then(response => response.json())
+                    }
+                    catch (error) {
+                    //this.errorMessage = error;
+                    console.error('There was an error!', error)
+                    const stringError = String(error)
+                    //this.addingStatus = false
+
+                    if (stringError.includes("Failed to fetch")) {
+                        this.displayServerError = true
+                        this.displayNumberOfElementsError = false
+                        }
+                    }
+
+                    this.getClients()
+            },
             disableInfoIcon(argument) {
                 if (argument === "disable") {
                     this.displayInfoIcon = false
@@ -114,16 +165,27 @@
             redirectToLogoPage(page) {
                 window.open(page)
             },
-            getClients(selectedFilter) {
+            getClients() {
                     ClientService.getClients().then((response) =>{
                         try {
-                            this.clients = response.data;
+                            this.clients = response.data.content;
                             this.displayServerError = false
+                            this.displayNumberOfElementsError = false
                         }
                         catch {
                             this.displayServerError = true
+                            this.displayEmptyListError = false
+                            this.displayNumberOfElementsError = false
                         }
-
+                        if (response.data.totalElements === 0) {
+                            this.displayEmptyListError = true
+                            this.displayServerError = false
+                            this.displayNumberOfElementsError = false
+                        }
+                        if (response.data.totalElements !== 0 && response.data.numberOfElements === 0) {
+                            this.displayNumberOfElementsError = true
+                            this.displayEmptyListError = false
+                    }
                     })
             },
             setAction(type, id) {
@@ -152,6 +214,7 @@
                         "Access-Control-Allow-Headers": "*"
                     },
                     body: JSON.stringify({
+                        token: localStorage.getItem('token'),
                         status: status,
                         id: id
                     }),
@@ -171,6 +234,7 @@
             }
         },
         created(){
+            localStorage.setItem('pageNumber', this.pageNumber)
             this.getClients(this.selectedFilter)
         }
     }
@@ -247,6 +311,7 @@
     .setPagination {
         width: 25%;
         float: right;
+        padding: 2%;
     }
 
   </style> 

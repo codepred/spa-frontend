@@ -73,26 +73,27 @@
             }).then(response => response.json())
         }
         catch (error) {
-            this.errorMessage = error;
-            console.error('There was an error!', error)
-            const stringError = String(error)
+                this.errorMessage = error;
+                console.error('There was an error!', error)
+                const stringError = String(error)
   
-        if (stringError.includes("Failed to fetch")) {
-          this.displayServerError = true
-          this.loginStatus = false
-          }
-        else {
-        this.displayIncorrectPassword = true
-        this.loginStatus = false
-          }
+            if (stringError.includes("Failed to fetch")) {
+                this.displayServerError = true
+                this.loginStatus = false
+                this.displayIncorrectPassword = false
+            }
+            else {
+                this.displayIncorrectPassword = true
+                this.loginStatus = false
+                this.displayServerError = false
+            }
+           return
         }
 
-        console.log(response.status)
-        if(response.status === 200){
-            console.log(response.data)
-            this.token = response.data
+        if(response !== 'undefined'){
+            this.token = response.token
             localStorage.setItem('token', this.token);
-            this.$router.push('/Main-view')
+            this.$router.push('/Main')
         }
       } 
     }

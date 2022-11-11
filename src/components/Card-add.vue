@@ -83,7 +83,8 @@
             "Access-Control-Allow-Headers": "*"
           },
           body: JSON.stringify({
-            url: this.urlAddress,
+            token: localStorage.getItem('token', this.token),
+            url: this.urlAddress
           }),
           }).then(response => response.json())
         }
