@@ -138,7 +138,12 @@
           }
         }
       }
-
+      },
+      beforeMount() {
+      localStorage.setItem('filter',"WSZYSTKIE")
+      if(localStorage.getItem('token') == null){
+        this.$router.push('/log-in')
+        }
       }
 }
 

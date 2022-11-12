@@ -237,8 +237,15 @@
         },
         created(){
             localStorage.setItem('pageNumber', this.pageNumber)
+            this.selectedFilter = "WSZYSTKIE"
             this.getClients(this.selectedFilter)
-        }
+        },
+        beforeMount() {
+            localStorage.setItem('filter',"WSZYSTKIE")
+            if(localStorage.getItem('token') == null){
+                this.$router.push('/log-in')
+            }
+    }
     }
   
   
@@ -254,10 +261,11 @@
         display: inline-block;
         float: none;
         width: 100%;
+        min-width: 1000px;
     }
 
     .filtersTab {
-        width: 15%;
+        width: 25%;
         list-style-type: none;
     }
     button {
