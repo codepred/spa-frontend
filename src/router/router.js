@@ -8,7 +8,7 @@ import Login from '../components/Log-in.vue'
 const routes = [
     {
         path: '/',
-        redirect: '/main'
+        redirect: '/log-in'
     },
     {
         path: '/main',
