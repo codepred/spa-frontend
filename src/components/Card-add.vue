@@ -213,7 +213,7 @@
     text-align: center;
   }
 
-input {
+  .form-control-lg {
     display: block;
     width: 50%;
     height: calc(1.5em + 0.75rem + 2px);

@@ -14,7 +14,7 @@
               <br>
           <div class="showPasswordClass"> 
               <input type="checkbox" class="checkboxClass" id="checkboxButton" @click="toggleShow"/>
-              <label id="showPasswordLabel" @click="markCheckbox"> Pokaż hasło </label>
+              <label id="showPasswordLabel" @click="markCheckbox" class="showPasswordLabel"> Pokaż hasło </label>
           </div> 
           </div>
           <button v-if="!loginStatus" type="submit" class="btn btn-dark btn-lg">Zaloguj się</button>
@@ -108,6 +108,9 @@
     width: 5%;
     height: 5%;
   }
+  .showPasswordClass {
+    padding-top: 1%;
+  }
   .containerDisplay {
     text-align: center;
     align-items: center;
@@ -117,7 +120,7 @@
     width: 100%;
     
   }
-  input {
+  .form-control-lg {
     display: block;
     width: 30%;
     height: calc(1.5em + 0.75rem + 2px);

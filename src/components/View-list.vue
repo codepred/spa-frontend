@@ -48,7 +48,7 @@
                     <td>{{client.id}}</td>
                     <td>{{client.url}}</td>
                     <td>
-                        <img class="logoImg" @mouseover="disableInfoIcon('disable')" @mouseleave="disableInfoIcon('enable')" v-bind:src=client.logoPath />
+                        <img class="logoImg" v-bind:src=client.logoPath />
                         <img class="redirectToLogo" v-if="displayInfoIcon" @click="redirectToLogoPage(client.logoPath)" width="17" height="17" src='../img/info_icon.svg' />
                     </td>
                     <td>{{client.phoneNumber}}</td>
@@ -154,14 +154,6 @@
                     }
 
                     this.getClients()
-            },
-            disableInfoIcon(argument) {
-                if (argument === "disable") {
-                    this.displayInfoIcon = false
-                }
-                if (argument === "enable") {
-                    this.displayInfoIcon = true
-                }
             },
             redirectToLogoPage(page) {
                 window.open(page)
@@ -306,17 +298,9 @@
         padding: 10%;
         margin: auto;
     }
-    .logoImg:hover {
-        width: 100%;
-        height: 100%;
-    }
     .redirectToLogo {
         display: inline-block;
         margin: auto;
-    }
-    .redirectToLogo:hover {
-        cursor: pointer;
-        display: inline-block;
     }
     .setPagination {
         width: 25%;
