@@ -41,10 +41,15 @@
       <input 
         type="file"
         id="avatar" 
+        ref="importedFile"
         name="avatar"
         accept=".txt, .csv"
-        @click="sendFile()"
+        @change="sendFile"
         />
+        <br/>
+        <label v-if="displayFileNamePreview">
+        {{ fileName }}
+      </label>
       </div>
   </div>
 
@@ -63,11 +68,49 @@
       improperUrl: false,
       duplicatePage: false,
       displayServerError: false,
-      httpsMissing: false
+      displayFileNamePreview: false, 
+      httpsMissing: false,
+      fileContent: "",
+      fileName: "",
     }
   },
   methods: {
+      sendFile(event) {
+        const file = event.target.files[0]
+        this.fileName = file.name
+        this.displayFileNamePreview = true
 
+        let reader = new FileReader();
+
+        reader.onload = function(e) {
+            let resultTab = []
+            resultTab = e.currentTarget.result
+              try {
+                var response = fetch("http://54.37.234.76:8081/company/add-multiple", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "*",
+                  "Access-Control-Allow-Headers": "*"
+              },
+                body: JSON.stringify({
+                  token: localStorage.getItem('token', this.token),
+                  list: resultTab
+                }),
+               }).then(response => response.json())
+               console.log(response)
+              }
+              catch (error) {
+                  this.errorMessage = error;
+                  console.error('There was an error!', error)
+                  this.addingStatus = false
+              }
+        }
+
+        reader.readAsText(file)
+
+      },
       async login(e) {
         
         this.addingStatus = true
@@ -81,9 +124,6 @@
           this.addingStatus = false
           return
         }
-
-
-
 
         e.preventDefault();
 
