@@ -38,6 +38,9 @@
       </div>
     </form>
     <div class="setPagination">
+      <label>
+        Import z pliku
+      </label>
       <input 
         type="file"
         id="avatar" 
@@ -46,11 +49,8 @@
         accept=".txt, .csv"
         @change="sendFile"
         />
-        <br/>
-        <label v-if="displayFileNamePreview">
-        {{ fileName }}
-      </label>
       </div>
+      <div class="importPage" v-if="displayImportPage"></div>
   </div>
 
   </template>
@@ -72,6 +72,8 @@
       httpsMissing: false,
       fileContent: "",
       fileName: "",
+      displayImportPage: false,
+      isVisible: false
     }
   },
   methods: {
@@ -99,7 +101,8 @@
                   list: resultTab
                 }),
                }).then(response => response.json())
-               console.log(response)
+               let responseData = response
+               console.log(responseData)
               }
               catch (error) {
                   this.errorMessage = error;
@@ -229,8 +232,8 @@
     display: inline-block;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
-  button {
-    width: 50%;
+  .btn-dark {
+    width: 50% !important;
     justify-content: center;
   }
 
@@ -258,7 +261,5 @@
     }
 
 </style>
-
-
 
 
