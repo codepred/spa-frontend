@@ -1,5 +1,5 @@
-<template @mouseover="updateLoginButton">
-  <div class="vue-template">
+<template>
+  <div class="vue-template" @mouseover="updateLoginButton">
     <!-- Navigation -->
     <nav class="navbar shadow bg-white rounded justify-content-between flex-nowrap flex-row fixed-top">
       <div class="container">
@@ -29,10 +29,30 @@
 
   data() {
     return {
+      showLogoutButton: true
       }
   },
     methods: {
-      }
+      updateLoginButton() {
+            const checkURL = String(window.location.href)
+
+            if (checkURL.includes("log-in")) {
+              this.showLogoutButton = false
+            }
+            else {
+              this.showLogoutButton = true
+            }
+          },
+      clearSessionStorage () {
+             localStorage.removeItem('token');
+          }
+      },
+    mounted:function() {
+      const checkURL = String(window.location.href)
+      if (checkURL.includes("log-in")) {
+        this.showLogoutButton = false
+        }
+      },
  }
   
 

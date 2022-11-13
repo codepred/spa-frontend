@@ -15,11 +15,13 @@
     "jsonwebtoken": "^8.5.1",
     "popper.js": "^1.14.3",
     "typescript": "^4.7.4",
+    "usemodal-vue3": "^0.3.7",
     "vue": "^3.2.13",
     "vue-excel-xlsx": "^1.2.2",
     "vue-multiselect": "^3.0.0-alpha.2",
     "vue-resource": "^1.5.3",
     "vue-router": "^4.0.15",
+    "vuesax": "^3.12.2",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

@@ -1,5 +1,10 @@
 <template>
     <div class = "container-display">
+        <div class="addNewCard">
+            <router-link to="/card-add">
+                <button class="btn btn-dark btn-lg float-right">Dodaj nowy</button>
+            </router-link>
+        </div>
         <h1 class = "text-center">Lista firm</h1>
         <div class="filtersTab" @click="test">
             <multiselect 
@@ -48,7 +53,7 @@
                     <td>{{client.id}}</td>
                     <td>{{client.url}}</td>
                     <td>
-                        <img class="logoImg" @mouseover="disableInfoIcon('disable')" @mouseleave="disableInfoIcon('enable')" v-bind:src=client.logoPath />
+                        <img class="logoImg" v-bind:src=client.logoPath />
                         <img class="redirectToLogo" v-if="displayInfoIcon" @click="redirectToLogoPage(client.logoPath)" width="17" height="17" src='../img/info_icon.svg' />
                     </td>
                     <td>{{client.phoneNumber}}</td>
@@ -69,20 +74,13 @@
             </tbody>
         </table>
     </div>
-
   </template>
 
   <script>
   import ClientService from '../services/ClientService'
   import Multiselect from 'vue-multiselect'
-
-  var selectedFilter = "WSZYSTKIE"
-
-  export { selectedFilter }
   
- 
-
-   export default {
+    export default {
         /* eslint-disable */
         components: {
             Multiselect
@@ -114,13 +112,14 @@
             async setPage(event) {
                 console.log(this.pageNumber)
                 console.log(event)
-
-                if (this.pageNumber < 1 || this.pageNumber === null || this.pageNumber === undefined || this.pageNumber === "" || isNaN()) {
+                
+                if (this.pageNumber < 1 || this.pageNumber === null || this.pageNumber === undefined || this.pageNumber === "" || isNaN(this.pageNumber)) {
                     this.displayWrongPageNumberError = true
                     this.displayNumberOfElementsError = false
                     return
                 }
                 this.displayWrongPageNumberError = false 
+                this.displayNumberOfElementsError = false
 
 
                 localStorage.setItem('pageNumber', this.pageNumber)
@@ -154,14 +153,6 @@
                     }
 
                     this.getClients()
-            },
-            disableInfoIcon(argument) {
-                if (argument === "disable") {
-                    this.displayInfoIcon = false
-                }
-                if (argument === "enable") {
-                    this.displayInfoIcon = true
-                }
             },
             redirectToLogoPage(page) {
                 window.open(page)
@@ -246,7 +237,7 @@
                 this.$router.push('/log-in')
             }
     }
-    }
+}
   
   
   </script>
@@ -254,16 +245,22 @@
 <style src="../assets/css/vue-multiselect.min.css"></style>
 
   <style>
+    .btn-lg {
+        width: 15% !important;
+    }
+    .addNewCard {
+        padding-bottom: 5%;
+        padding-top: 15%;
+    }
     .container-display {
         text-align: center;
         align-items: center;
         justify-content: center;
         display: inline-block;
         float: none;
-        width: 100%;
-        min-width: 1000px;
+        width: 1600px;
+        min-width: 1200px;
     }
-
     .filtersTab {
         width: 25%;
         list-style-type: none;
@@ -306,17 +303,9 @@
         padding: 10%;
         margin: auto;
     }
-    .logoImg:hover {
-        width: 100%;
-        height: 100%;
-    }
     .redirectToLogo {
         display: inline-block;
         margin: auto;
-    }
-    .redirectToLogo:hover {
-        cursor: pointer;
-        display: inline-block;
     }
     .setPagination {
         width: 25%;
