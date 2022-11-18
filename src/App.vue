@@ -4,17 +4,36 @@
     <nav class="navbar shadow bg-white rounded justify-content-between flex-nowrap flex-row fixed-top">
       <div class="container">
         <a class="navbar-brand float-left" target="_blank">
+          <router-link to="/main">
+            <img src="./img/spa_logo.jpg" width="100" heigh="100" />
+          </router-link>
         </a>
-        <ul class="nav navbar-nav flex-row float-right">
-          <li class="nav-item">
-            <router-link v-if="showLogoutButton" class="nav-link pr-3" to="/log-in" @click="clearSessionStorage">Wyloguj</router-link>
+        <ul class="nav-leftside">
+          <li class="nav-items">
+            <router-link to="/treatments-list" @click="clearSessionStorage">Zabiegi</router-link>
+          </li>
+          <li class="nav-items">
+            <router-link to="/rooms-list" @click="clearSessionStorage">Pokoje</router-link>
+          </li>
+        </ul>
+        <ul class="nav-rightside">
+          <li class="nav-items">
+              <span class="btn-circle" v-if="displayNumberOfItems"> {{ numberOfItemsCart }} </span>
+              <router-link to="/check-out" @click="clearSessionStorage">Koszyk</router-link>
+          </li>
+          <li class="nav-items">
+            <router-link v-if="showLogoutButton" to="/main" @click="clearSessionStorage">Wyloguj</router-link>
+          </li>
+          <li class="nav-items">
+            <router-link v-if="!showLogoutButton" to="/log-in" @click="clearSessionStorage">Zaloguj się</router-link>
           </li>
         </ul>
       </div>
     </nav>
     <!-- Main -->
-    <div class="App">
+    <div class="App" @mouseover="updateCartItemsNumber()" @click="updateCartItemsNumber()">
       <div class="vertical-center">
+        <img src="./img/spa_background.jpeg" />
         <div class="inner-block">
           <router-view />
         </div>
@@ -29,14 +48,40 @@
 
   data() {
     return {
-      showLogoutButton: true
+      showLogoutButton: true,
+      showSignUpButton: false,
+      numberOfItemsCart: 0,
+      displayNumberOfItems: false,
       }
   },
     methods: {
+      updateCartItemsNumber() {
+        let tempItemsNumber = 0
+        if (!isNaN(parseInt(localStorage.getItem('numberOfRoomsAdded'), 10))) {
+          tempItemsNumber += parseInt(localStorage.getItem('numberOfRoomsAdded'), 10)
+        }
+        if (!isNaN(parseInt(localStorage.getItem('numberOfTreatmentsAdded'), 10))) {
+          tempItemsNumber += parseInt(localStorage.getItem('numberOfTreatmentsAdded'), 10)
+        }
+
+        if (tempItemsNumber > 0) {
+          this.numberOfItemsCart = tempItemsNumber
+          this.displayNumberOfItems = true
+        }
+        else 
+          this.displayNumberOfItems = false
+      },
+      checkIfUserLoggedIn() {
+        console.log(localStorage.getItem('token'))
+        if (localStorage.getItem('token') === undefined) {
+          this.showLogoutButton = false
+          this.showSignUpButton = true
+        }
+      },
       updateLoginButton() {
             const checkURL = String(window.location.href)
 
-            if (checkURL.includes("log-in")) {
+            if (checkURL.includes("log-in") || checkURL.includes("create-user")) {
               this.showLogoutButton = false
             }
             else {
@@ -48,10 +93,7 @@
           }
       },
     mounted:function() {
-      const checkURL = String(window.location.href)
-      if (checkURL.includes("log-in")) {
-        this.showLogoutButton = false
-        }
+        this.updateLoginButton()
       },
  }
   
@@ -61,13 +103,34 @@
 
 
 <style>
+.btn-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    position: absolute;
+    right: 327px;
+    background-color: orange;
+    color: white;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    font-size: 15px;
+    border: 1px;
+}
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #62478a;
+  color: black;
 }
 
 .vertical-center {
@@ -75,12 +138,33 @@ position: absolute;
 top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
+background-color: white;
+overflow: scroll;
 }
-
 
 .inner-block {
-  display: inline-block;
+  display: block;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
+.nav-leftside {
+  display: flex;
+  float: left;
+}
+.nav-rightside {
+  display: flex;
+  float: right;
+}
+
+.nav-items {
+  font-size: 20px;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 3%;
+}
 
 </style>

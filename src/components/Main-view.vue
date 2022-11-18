@@ -1,35 +1,33 @@
 <template>
-  <div class="main-container">
-    <form @submit.prevent="karta">   
-      <router-link to="/card-add">
-        <button type="submit" class="btn btn-dark btn-lg btn-block">Dodaj firmę</button>
-      </router-link>
-      <div class="divider" />
-      <router-link to="/view-list">
-        <button type="submit" class="btn btn-dark btn-lg btn-block">Lista firm</button>
-      </router-link>
-    </form>
+  <div id="app">
+    <div class="main-page"></div>
+    <label class="title-text">
+      Witamy na stronie SPA Club 
+    </label>
+    <h1>
+      Doznaj pełnego odprężenia podczas relaksacyjnych pakietów Spa, łączących saunę, kąpiel piwna,  degustacje i sielski relaks na słomie. <br> <br>
+
+      Fenomenalna atrakcja w centrum miasta. Idealna dla par i dla przyjaciół. Sauna, kąpiel, degustacja i relaks na słomie to świetna propozycja na deszczowe dni i leniwe wieczory po aktywnym dniu. 
+    </h1>
+    <br>
+
+
   </div>
+
 </template>
 
 <script>
+
 
 export default {
   data () {
     return {
     }
   },
+  computed: {
+  },
   methods: {
-    
-   },
-   beforeMount() {
-      localStorage.setItem('filter',"WSZYSTKIE")
-      if(localStorage.getItem('token') == null){
-        this.$router.push('/log-in')
-      }
-    }
-
-
+  }
 }
   
 
@@ -37,13 +35,16 @@ export default {
 
 <style>
 
-.main-container {
-  text-align: center;
+.title-text {
+  font-size: 25px;
+  padding-bottom: 3%;
+}
+h1 {
+  font-size: 15px;
 }
 
-.divider{
-    width:5px;
-    height:auto;
-    display:inline-block;
+label {
+    margin-left: +10px;
 }
+
 </style>

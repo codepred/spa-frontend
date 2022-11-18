@@ -1,6 +1,11 @@
 <template>
     <div class="containerDisplay">
       <form @submit.prevent="login">
+        <router-link to="/create-user">
+          <div class="redirectToCreateUser">Nie mam konta</div>
+        </router-link>
+        <br>
+        <br>
           <h3>Zaloguj się</h3>
           <div class="form-group">
             <div class="display-error-login" v-if="displayIncorrectPassword"> Niepoprawna nazwa użytkownika lub hasło </div>
@@ -117,7 +122,7 @@
     justify-content: center;
     display: inline-block;
     float: none;
-    width: 100%;
+    width: 50%;
     
   }
   .form-control-lg {
@@ -182,5 +187,14 @@
   button #checkboxButton:hover{
     cursor: pointer;
   }
-  
+  .redirectToCreateUser {
+    float:right;
+    padding-right: 5%;
+  }
+  .redirectToCreateUser:hover {
+    cursor: pointer;
+    text-decoration: underline; 
+  }
+
+
   </style>
