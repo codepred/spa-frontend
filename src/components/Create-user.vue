@@ -63,7 +63,7 @@
         e.preventDefault();
   
         try {
-            var response = await fetch("https://localhost:8081/user/register", {
+            var response = await fetch("http://localhost:8081/user/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -98,7 +98,7 @@
         if(response !== 'undefined'){
             this.token = response.token
             localStorage.setItem('token', this.token);
-            this.$router.push('/Main')
+            this.$router.push('/log-in')
         }
       } 
     }

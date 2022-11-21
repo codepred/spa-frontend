@@ -1,8 +1,6 @@
-# infinite-tech
+# Projekt hotel
 
-<b>Website url:<b>
 
-gabazaba.pl
 
 
 ## Project setup

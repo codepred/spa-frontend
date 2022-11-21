@@ -11,7 +11,7 @@ import Treatments from '../components/Treatments-list.vue'
 const routes = [
     {
         path: '/',
-        redirect: '/main'
+        redirect: '/create-user'
     },
     {
         path: '/main',

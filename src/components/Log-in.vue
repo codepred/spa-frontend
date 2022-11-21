@@ -63,7 +63,7 @@
         e.preventDefault();
   
         try {
-            var response = await fetch("localhost:8081/user/login", {
+            var response = await fetch("http://localhost:8081/user/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -94,11 +94,17 @@
             }
            return
         }
-
-        if(response !== 'undefined'){
+        console.log(response)
+        console.log(response.status)
+        console.log(response.email)
+        if(response.email){
             this.token = response.token
             localStorage.setItem('token', this.token);
             this.$router.push('/Main')
+        }
+        else{
+            console.log('BAD PASSWORD')
+         this.displayIncorrectPassword = true
         }
       } 
     }
