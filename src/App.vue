@@ -22,10 +22,10 @@
               <router-link to="/check-out" @click="clearSessionStorage">Koszyk</router-link>
           </li>
           <li class="nav-items">
-            <router-link v-if="showLogoutButton" to="/main" @click="clearSessionStorage">Wyloguj</router-link>
+            <router-link v-if="showLogoutButton" to="/log-in" @click="clearSessionStorage">Wyloguj</router-link>
           </li>
           <li class="nav-items">
-            <router-link v-if="!showLogoutButton" to="/log-in" @click="clearSessionStorage">Zaloguj się</router-link>
+            <router-link v-if="!showLogoutButton" to="/log-in" @click="clearSessionStorage">Zaloguj</router-link>
           </li>
         </ul>
       </div>

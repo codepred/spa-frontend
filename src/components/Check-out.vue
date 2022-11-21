@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div class="check-out-main"></div>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-    <div v-if="!addingStatus" class="clear-cart" @click="clearCart()">Wyczyść koszyk</div> <br> <br> <br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <div class="clear-cart" @click="clearCart()">Wyczyść koszyk</div> 
     <table class="table table=striped" id="scrollHere"> 
       <h2> Zabiegi </h2>
       <div v-if="!displayEmptyTreatmentsError" class="display-error"></div>
@@ -13,9 +13,9 @@
         <tr v-for="treatment in treatmentsAdded" v-bind:key="treatment.id">
           <td>{{treatment.name}}</td>
           <td>
-            <img v-if="!treatment.submitted" class="number-add" @click="numberChange('treatment','minus', treatment.id)" src="../img/minus-icon.svg" width="10" />
+            <img v-if="!treatment.submitted" class="number-add" @click="numberChange('treatment','minus', treatment.name)" src="../img/minus-icon.svg" width="10" />
             {{treatment.number}} szt.
-            <img  v-if="!treatment.submitted" class="number-add" @click="numberChange('treatment','plus', treatment.id)" src="../img/plus-icon.svg" width="10" />
+            <img  v-if="!treatment.submitted" class="number-add" @click="numberChange('treatment','plus', treatment.name)" src="../img/plus-icon.svg" width="10" />
           </td>
           <td v-if="!treatment.submitted">
             <input 
@@ -36,7 +36,7 @@
               {{treatment.date}}
             </td>
           <td v-if="treatment.number!==0">
-            <div v-if="!treatment.submitted" class="accept-button" @click="setDate('treatment', treatment.id)"> Zatwierdź </div>
+            <div v-if="!treatment.submitted" class="accept-button" @click="setDate('treatment', treatment.name, treatment.id)"> Zatwierdź </div>
           </td>
         </tr>
       </tbody>
@@ -51,9 +51,9 @@
         <tr v-for="room in roomsAdded" v-bind:key="room.id">
           <td>{{room.name}}</td>
           <td>
-            <img v-if="!room.submitted" class="number-add" @click="numberChange('room','minus', room.id)" src="../img/minus-icon.svg" width="10" />
+            <img v-if="!room.submitted" class="number-add" @click="numberChange('room','minus', room.name)" src="../img/minus-icon.svg" width="10" />
             {{room.number}} szt.
-            <img  v-if="!room.submitted" class="number-add" @click="numberChange('room','plus', room.id)" src="../img/plus-icon.svg" width="10" />
+            <img  v-if="!room.submitted" class="number-add" @click="numberChange('room','plus', room.name)" src="../img/plus-icon.svg" width="10" />
           </td>
           <td v-if="!room.submitted">
             <input 
@@ -90,7 +90,7 @@
               {{room.dateLeaving}}
             </td>
           <td v-if="room.number!==0">
-            <div v-if="!room.submitted" class="accept-button" @click="setDate('room', room.id)"> Zatwierdź </div>
+            <div v-if="!room.submitted" class="accept-button" @click="setDate('room', room.name, room.id)"> Zatwierdź </div>
           </td>
         </tr>
       </tbody>
@@ -106,6 +106,7 @@ export default {
   data () {
     return {
       treatmentsAdded: new Array(),
+      displayWrongInputError: false,
       roomsAdded: new Array(),
       displayEmptyTreatmentsError: false,
       displayEmptyRoomsError: false,
@@ -113,13 +114,17 @@ export default {
       displayWrongInput: new Array(8).fill(false),
       displayWrongInputFirst: new Array(8).fill(false),
       displayWrongInputSecond: new Array(8).fill(false),
-      displayWrongInputErrorRoom: false 
+      displayWrongInputErrorRoom: false,
+      numberOfRooms: 0,
+      numberOfTreatments: 0
     }
   },
   mounted:function() { 
       try {
         this.treatmentsAdded = JSON.parse(localStorage.getItem('addedTreatmentsCart'))
+        this.numberOfTreatments = parseInt(localStorage.getItem('numberOfTreatmentsAdded'), 10)
         this.roomsAdded = JSON.parse(localStorage.getItem('addedRoomsCart'))
+        this.numberOfRooms = parseInt(localStorage.getItem('numberOfRoomsAdded'), 10)
       }
       catch {
         // pass
@@ -132,22 +137,45 @@ export default {
       }
   },
   methods: {
-    numberChange(itemType, change, id) {
+    numberChange(itemType, change, itemName) {
       if (itemType === 'room') {
-        if (change === 'plus') {
-          this.roomsAdded[id].number += 1
+        let idCheck = 0 
+        for (let i=0; i<this.roomsAdded.length; i++) {
+          if (this.roomsAdded[i].name === itemName) {
+            idCheck = i
+          }
         }
-        else if (change === 'minus' && (this.roomsAdded[id].number-1) >= 0) {
-          this.roomsAdded[id].number -= 1
-        }
+          if (change === 'plus') {
+            this.roomsAdded[idCheck].number += 1
+            this.numberOfRooms += 1
+            localStorage.setItem('addedRoomsCart',JSON.stringify(this.roomsAdded))
+            localStorage.setItem('numberOfRoomsAdded',this.numberOfRooms)
+          }
+          else if (change === 'minus' && (this.roomsAdded[idCheck].number-1) >= 0) {
+            this.roomsAdded[idCheck].number -= 1
+            this.numberOfRooms -= 1
+            localStorage.setItem('addedRoomsCart',JSON.stringify(this.roomsAdded))
+            localStorage.setItem('numberOfRoomsAdded',this.numberOfRooms)
+          }
       }
       else if (itemType === 'treatment') {
-        if (change === 'plus') {
-          this.treatmentsAdded[id].number += 1
-          return
+        let idCheck = 0 
+        for (let i=0; i<this.treatmentsAdded.length; i++) {
+          if (this.treatmentsAdded[i].name === itemName) {
+            idCheck = i
+          }
         }
-        else if (change === 'minus' && (this.treatmentsAdded[id].number-1) >=0) {
-          this.treatmentsAdded[id].number -= 1
+        if (change === 'plus') {
+          this.treatmentsAdded[idCheck].number += 1
+          this.numberOfTreatments += 1
+          localStorage.setItem('addedTreatmentsCart',JSON.stringify(this.treatmentsAdded))
+          localStorage.setItem('numberOfTreatmentsAdded',this.numberOfTreatments)
+        }
+        else if (change === 'minus' && (this.treatmentsAdded[idCheck].number-1) >=0) {
+          this.treatmentsAdded[idCheck].number -= 1
+          this.numberOfTreatments -= 1
+          localStorage.setItem('addedTreatmentsCart',JSON.stringify(this.treatmentsAdded))
+          localStorage.setItem('numberOfTreatmentsAdded',this.numberOfTreatments)
         }
       }
     },
@@ -156,31 +184,46 @@ export default {
       const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`
       return date
     },
-    setDate(type, id) {
+    setDate(type, itemName, id) {
       if (type === "treatment") {
-        if (this.treatmentsAdded[id].date < this.todaysDate()) {
+        let idCheck = 0
+        for (let i=0; i<this.treatmentsAdded.length; i++) {
+          if (this.treatmentsAdded[i].name == itemName) {
+            idCheck = i
+          }
+        }
+        if (this.treatmentsAdded[idCheck].date < this.todaysDate()) {
           this.displayWrongInput[id] = true
           this.displayWrongInputError = true
           return
         }
-        this.treatmentsAdded[id].submitted = true
+        this.treatmentsAdded[idCheck].submitted = true
         this.displayWrongInputError = false
+        localStorage.setItem('addedTreatmentsCart',JSON.stringify(this.treatmentsAdded))
       }
       else if (type === "room") {
-        if (this.roomsAdded[id].dateArrival < this.todaysDate() || this.roomsAdded[id].dateLeaving < this.todaysDate()) {
+        console.log(this.roomsAdded)
+        let idCheck = 0
+        for (let i=0; i<this.roomsAdded.length; i++) {
+          if (this.roomsAdded[i].name == itemName) {
+            idCheck = i
+          }
+        }
+        if (this.roomsAdded[idCheck].dateArrival < this.todaysDate() || this.roomsAdded[idCheck].dateLeaving < this.todaysDate()) {
           this.displayWrongInputFirst[id] = true
           this.displayWrongInputSecond[id] = true
           this.displayWrongInputErrorRoom = true
           return
         }
-        if (this.roomsAdded[id].dateArrival > this.roomsAdded[id].dateLeaving) {
+        if (this.roomsAdded[idCheck].dateArrival > this.roomsAdded[idCheck].dateLeaving) {
           this.displayWrongInputFirst[id] = true
           this.displayWrongInputSecond[id] = true
           this.displayWrongInputErrorRoom = true
           return
         }
-        this.roomsAdded[id].submitted = true
+        this.roomsAdded[idCheck].submitted = true
         this.displayWrongInputErrorRoom = false
+        localStorage.setItem('addedRoomsCart',JSON.stringify(this.roomsAdded))
       }
 
 
@@ -190,6 +233,11 @@ export default {
       localStorage.removeItem('addedTreatmentsCart')
       localStorage.removeItem('numberOfRoomsAdded')
       localStorage.removeItem('addedRoomsCart')
+      this.treatmentsAdded = new Array()
+      this.roomsAdded = new Array()
+      this.numberOfTreatments = 0
+      this.numberOfRooms = 0 
+
       location.reload()
     },
     created: {
@@ -197,7 +245,6 @@ export default {
         const today = new Date();
         const date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear()
         this.todayVariable = date;
-        console.log(this.todayVariable)
       }
     }
   }

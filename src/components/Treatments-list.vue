@@ -108,12 +108,24 @@
           "Kapiel aromatyczna",
           "Kapiel w piwie",
           "Masaż tajski",
-          "asaż relaksacyjny",
+          "Masaż relaksacyjny",
           "Jacuzzi"
         ]
       }
     },
-    computed: {
+    mounted: function() {
+      try {
+        if (JSON.parse(localStorage.getItem('addedTreatmentsCart'))) {
+            this.addedItems = JSON.parse(localStorage.getItem('addedTreatmentsCart'))
+            console.log(this.addedItems)
+        }
+        if (parseInt(localStorage.getItem('numberOfTreatmentsAdded'), 10)) {
+            this.numberOfElementsAdded = parseInt(localStorage.getItem('numberOfTreatmentsAdded'), 10)
+        }
+      }
+      catch {
+        // pass
+      }
     },
     methods: {
       todaysDate() {
@@ -126,7 +138,7 @@
           let duplicateDetected = false
           let numberOfElements = JSON.parse(localStorage.getItem('addedTreatmentsCart')).length
             this.addedItems =  JSON.parse(localStorage.getItem('addedTreatmentsCart'))
-            console.log(numberOfElements)
+            
             for (let i=0; i< numberOfElements; i++) {
               if (this.addedItems[i].id === itemId) {
                 this.addedItems[i].number += 1

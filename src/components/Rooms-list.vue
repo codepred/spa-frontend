@@ -85,6 +85,20 @@
         ]
       }
     },
+    mounted: function() {
+      try {
+        if (JSON.parse(localStorage.getItem('addedRoomsCart'))) {
+            this.addedItems = JSON.parse(localStorage.getItem('addedRoomsCart'))
+            console.log(this.addedItems)
+        }
+        if (parseInt(localStorage.getItem('numberOfRoomsAdded'), 10)) {
+            this.numberOfElementsAdded = parseInt(localStorage.getItem('numberOfRoomsAdded'), 10)
+        }
+      }
+      catch {
+        // pass
+      }
+    },
     methods: {
         todaysDate(dayToAdd) {
         const current = new Date();
@@ -114,6 +128,7 @@
           this.addedItems.push({"id": itemId, "number": 1, "image": this.roomImages[itemId], "name": this.roomNames[itemId], "dateArrival": this.todaysDate(0), "dateLeaving": this.todaysDate(1), "submitted": false})
           this.numberOfElementsAdded += 1
         }
+
         console.log(this.addedItems)
         localStorage.setItem('numberOfRoomsAdded',this.numberOfElementsAdded)
         localStorage.setItem('addedRoomsCart',JSON.stringify(this.addedItems))
