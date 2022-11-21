@@ -1,6 +1,7 @@
 <template>
     <div id="rooms-container">
         <div class="rooms-page">
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
             <label class="title-text">
                 Pokoje
             </label>
@@ -75,8 +76,8 @@
             "Pokój premium"
         ],
         roomImages: [
-            "../img/rooms/single_room.jpeg",
-            "../img/rooms/double_room.jpg",
+            "src/img/rooms/single_room.jpeg",
+            "src/img/rooms/double_room.jpg",
             "../img/rooms/view_room.jpeg",
             "../img/rooms/terrace_room.jpeg",
             "../img/rooms/balcony_room.jpeg",
@@ -85,6 +86,11 @@
       }
     },
     methods: {
+        todaysDate(dayToAdd) {
+        const current = new Date();
+        const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()+dayToAdd}`
+        return date
+      },
         addToCart(itemId) {
         if (localStorage.getItem('numberOfRoomsAdded')) {
             let duplicateDetected = false
@@ -100,12 +106,12 @@
               }
             }
             if (duplicateDetected === false) {
-              this.addedItems.push({"id": itemId, "number": 1, "image": this.roomImages[itemId], "name": this.roomNames[itemId]})
+              this.addedItems.push({"id": itemId, "number": 1, "image": this.roomImages[itemId], "name": this.roomNames[itemId], "dateArrival": this.todaysDate(0), "dateLeaving": this.todaysDate(1), "submitted": false})
               this.numberOfElementsAdded += 1
             }
         }
         else {
-          this.addedItems.push({"id": itemId, "number": 1, "image": this.roomImages[itemId], "name": this.roomNames[itemId]})
+          this.addedItems.push({"id": itemId, "number": 1, "image": this.roomImages[itemId], "name": this.roomNames[itemId], "dateArrival": this.todaysDate(0), "dateLeaving": this.todaysDate(1), "submitted": false})
           this.numberOfElementsAdded += 1
         }
         console.log(this.addedItems)
@@ -123,7 +129,7 @@
     border-radius: 0.25rem;
   }
   .rooms-page {
-    padding-top: 60%;
+    padding-top: 25%;
   }
   .btn {
     width: 50%;
@@ -174,8 +180,6 @@
     align-items: center;
     border-radius: 7px;
 }
-
-
   .title-text {
     font-size: 25px;
     padding-bottom: 3%;

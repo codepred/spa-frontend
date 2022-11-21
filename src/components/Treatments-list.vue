@@ -1,8 +1,9 @@
 <template>
     <div id="treatment-container">
       <div class="treatment-page">
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
       <label class="title-text">
-        Pokoje
+        Zabiegi
       </label>
       <ul class="listOfProducts">
         <li class="product">
@@ -31,7 +32,7 @@
         </li>
         <li class="product">
             <img class="itemImage"  src="../img/treatments/aroma_bath.jpeg" /> <br>
-            <a>Kapiel aromatyczna</a>
+            <a>Kąpiel aromatyczna</a>
             <div>59 zł/h</div>
             <button class="btn btn-success" @click="addToCart(3)">Dodaj
                 <img src="../img/cart_icon.png" />
@@ -39,7 +40,7 @@
         </li>
         <li class="product">
             <img class="itemImage" src="../img/treatments/beer_bath.jpeg" /> <br>
-            <a>Kapiel w piwie</a>
+            <a>Kąpiel w piwie</a>
             <div>79 zł/h</div>
             <button class="btn btn-success" @click="addToCart(4)">Dodaj
                 <img src="../img/cart_icon.png" />
@@ -115,6 +116,11 @@
     computed: {
     },
     methods: {
+      todaysDate() {
+        const current = new Date();
+        const date = `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`
+        return date
+      },
       addToCart(itemId) {
         if (localStorage.getItem('numberOfTreatmentsAdded')) {
           let duplicateDetected = false
@@ -130,12 +136,12 @@
               }
             }
             if (duplicateDetected === false) {
-              this.addedItems.push({"id": itemId, "number": 1, "image": this.treatmentImages[itemId], "name": this.treatmentNames[itemId]})
+              this.addedItems.push({"id": itemId, "number": 1, "image": this.treatmentImages[itemId], "name": this.treatmentNames[itemId], "date": this.todaysDate(), "submitted": false})
               this.numberOfElementsAdded += 1
             }
         }
         else {
-          this.addedItems.push({"id": itemId, "number": 1, "image": this.treatmentImages[itemId], "name": this.treatmentNames[itemId]})
+          this.addedItems.push({"id": itemId, "number": 1, "image": this.treatmentImages[itemId], "name": this.treatmentNames[itemId],"date": this.todaysDate(), "submitted": false})
           this.numberOfElementsAdded += 1
         }
         console.log(this.addedItems)
@@ -157,7 +163,7 @@
     border-radius: 0.25rem;
   }
   .treatment-page {
-    padding-top: 100%;
+    padding-top: 78%;
   }
   .btn {
     width: 50%;

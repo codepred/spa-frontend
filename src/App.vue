@@ -17,7 +17,7 @@
           </li>
         </ul>
         <ul class="nav-rightside">
-          <li class="nav-items">
+          <li v-if="showLogoutButton" class="nav-items">
               <span class="btn-circle" v-if="displayNumberOfItems"> {{ numberOfItemsCart }} </span>
               <router-link to="/check-out" @click="clearSessionStorage">Koszyk</router-link>
           </li>
@@ -134,20 +134,23 @@
 }
 
 .vertical-center {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-background-color: white;
-overflow: scroll;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  overflow: scroll;
 }
 
 .inner-block {
-  display: block;
   position: absolute;
   text-align: center;
-  top: 50%;
+  top: 35%;
   left: 50%;
+  width: fit-content;
+  min-width: 300px;
+  margin-bottom: 30px;
+  margin-left: 80px;
   transform: translate(-50%, -50%);
 }
 

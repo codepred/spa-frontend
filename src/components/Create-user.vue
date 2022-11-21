@@ -22,8 +22,8 @@
               <label id="showPasswordLabel" @click="markCheckbox" class="showPasswordLabel"> Pokaż hasło </label>
           </div> 
           </div>
-          <button v-if="!loginStatus" type="submit" class="btn btn-dark btn-lg">Zarejestruj się</button>
-          <button v-if="loginStatus" type="submit" class="btn btn-dark btn-lg">Dodawanie...</button>
+          <button v-if="!loginStatus" type="submit" class="add-button">Zarejestruj się</button>
+          <button v-if="loginStatus" type="submit" class="add-button">Dodawanie...</button>
       </form>
     </div>
   
@@ -63,7 +63,7 @@
         e.preventDefault();
   
         try {
-            var response = await fetch("http://54.37.234.76:8081/user/login", {
+            var response = await fetch("https://localhost:8081/user/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -72,7 +72,7 @@
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify({
-                    login: this.username,
+                    email: this.username,
                     password: this.password
                 })
             }).then(response => response.json())
@@ -108,6 +108,7 @@
   </script>
   
   <style>
+
 
   .checkboxClass {
     width: 5%;

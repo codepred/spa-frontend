@@ -34,7 +34,9 @@ export default {
 </script>
 
 <style>
-
+.main-page {
+  top: 30% !important;
+}
 .title-text {
   font-size: 25px;
   padding-bottom: 3%;
