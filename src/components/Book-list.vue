@@ -21,11 +21,14 @@
              <td class="w-25">
               <img src="https://ale.pl/blog/wp-content/uploads/2018/09/Ebook1.blog_.png" class="img-fluid img-thumbnail" alt="Sheep">
             </td>
-            <td v-if="!book.wasRented">
+            <td v-if="!book.wasRented && book.isAbleToRent">
               <button  id="rentBook" type="button" class="btn btn-warning" @click="rentBook(book.id)">Rent</button>
             </td>
-            <td v-if="book.wasRented">
+            <td v-if="book.wasRented && book.isAbleToRent">
               <button  id="rentBook" type="button" class="btn btn-danger" @click="returnBook(book.id)">Return book</button>
+            </td>
+            <td v-if="!book.isAbleToRent">
+              <p> Book is disabled</p>
             </td>
           </tr>
         </tbody>

@@ -5,7 +5,8 @@ class BookService{
 
     getList(){
         console.log('HEREEE')
-        var response = axios.get("http://localhost:8081/books");      
+        var sessionId = localStorage.getItem('token')
+        var response = axios.get("http://localhost:8081/books/" + sessionId);      
         console.log(response)
         return response;
     }

@@ -1,12 +1,10 @@
 import { createRouter, createWebHistory} from 'vue-router'
-import Cardadd from '../components/Card-add.vue'
 import Viewlist from '../components/View-list.vue'
 import Mainview from '../components/Main-view.vue'
 import Login from '../components/Log-in.vue'
 import Createuser from '../components/Create-user.vue'
 import Checkout from '../components/Check-out.vue'
 import Books from '../components/Book-list.vue'
-import Treatments from '../components/Treatments-list.vue'
 
 const routes = [
     {
@@ -17,11 +15,6 @@ const routes = [
         path: '/main',
         name: 'Mainview',
         component: Mainview
-    },
-    {
-        path: '/card-add',
-        name: 'Cardadd',
-        component: Cardadd
     },
     {
         path: '/view-list',
@@ -48,11 +41,6 @@ const routes = [
         name: 'Books',
         component: Books
     },
-    {
-        path: '/treatments-list',
-        name: 'Treatments',
-        component: Treatments
-    }
 ]
 
 

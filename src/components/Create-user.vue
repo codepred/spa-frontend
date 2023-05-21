@@ -63,7 +63,7 @@
         e.preventDefault();
   
         try {
-            var response = await fetch("http://localhost:8081/user/register", {
+            var response = await fetch("http://localhost:8081/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -72,7 +72,7 @@
                     "Access-Control-Allow-Headers": "*"
                 },
                 body: JSON.stringify({
-                    email: this.username,
+                  username: this.username,
                     password: this.password
                 })
             }).then(response => response.json())
