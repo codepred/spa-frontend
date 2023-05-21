@@ -63,13 +63,10 @@
         e.preventDefault();
   
         try {
-            var response = await fetch("http://localhost:8081/user/login", {
+            var response = await fetch("http://localhost:8081/login", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "*",
-                    "Access-Control-Allow-Headers": "*"
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     email: this.username,
@@ -97,10 +94,12 @@
         console.log(response)
         console.log(response.status)
         console.log(response.email)
-        if(response.email){
-            this.token = response.token
+        if(response.sessionId !== 'null'){
+            this.token = response.sessionId
             localStorage.setItem('token', this.token);
-            this.$router.push('/Main')
+            this.$router
+          .push({ path: '/Main' })
+          .then(() => { this.$router.go() })
         }
         else{
             console.log('BAD PASSWORD')

@@ -5,27 +5,24 @@
       <div class="container">
         <a class="navbar-brand float-left" target="_blank">
           <router-link to="/main">
-            <img src="./img/spa_logo.jpg" width="100" heigh="100" />
+            <img src="./img/logo.jpg" width="100" heigh="100" />
           </router-link>
         </a>
         <ul class="nav-leftside">
           <li class="nav-items">
-            <router-link to="/treatments-list" @click="clearSessionStorage">Zabiegi</router-link>
-          </li>
-          <li class="nav-items">
-            <router-link to="/rooms-list" @click="clearSessionStorage">Pokoje</router-link>
+            <router-link v-if="showLogoutButton" to="/book-list">Lista ksiazek</router-link>
           </li>
         </ul>
         <ul class="nav-rightside">
           <li v-if="showLogoutButton" class="nav-items">
               <span class="btn-circle" v-if="displayNumberOfItems"> {{ numberOfItemsCart }} </span>
-              <router-link to="/check-out" @click="clearSessionStorage">Koszyk</router-link>
+              <router-link to="/check-out">Historia wypożyczeń</router-link>
           </li>
           <li class="nav-items">
             <router-link v-if="showLogoutButton" to="/log-in" @click="clearSessionStorage">Wyloguj</router-link>
           </li>
           <li class="nav-items">
-            <router-link v-if="!showLogoutButton" to="/log-in" @click="clearSessionStorage">Zaloguj</router-link>
+            <router-link v-if="!showLogoutButton" to="/log-in">Zaloguj</router-link>
           </li>
         </ul>
       </div>
@@ -33,7 +30,7 @@
     <!-- Main -->
     <div class="App" @mouseover="updateCartItemsNumber()" @click="updateCartItemsNumber()">
       <div class="vertical-center">
-        <img src="./img/spa_background.jpeg" />
+        <img src="./img/ksiegarnia.jpg" />
         <div class="inner-block">
           <router-view />
         </div>
@@ -73,20 +70,16 @@
       },
       checkIfUserLoggedIn() {
         console.log(localStorage.getItem('token'))
-        if (localStorage.getItem('token') === undefined) {
+        if (localStorage.getItem('token') === null) {
           this.showLogoutButton = false
           this.showSignUpButton = true
         }
       },
       updateLoginButton() {
-            const checkURL = String(window.location.href)
-
-            if (checkURL.includes("log-in") || checkURL.includes("create-user")) {
-              this.showLogoutButton = false
-            }
-            else {
-              this.showLogoutButton = true
-            }
+            if (localStorage.getItem('token') === null) {
+          this.showLogoutButton = false
+          this.showSignUpButton = true
+        }
           },
       clearSessionStorage () {
              localStorage.removeItem('token');

@@ -5,7 +5,7 @@ import Mainview from '../components/Main-view.vue'
 import Login from '../components/Log-in.vue'
 import Createuser from '../components/Create-user.vue'
 import Checkout from '../components/Check-out.vue'
-import Rooms from '../components/Rooms-list.vue'
+import Books from '../components/Book-list.vue'
 import Treatments from '../components/Treatments-list.vue'
 
 const routes = [
@@ -44,9 +44,9 @@ const routes = [
         component: Checkout
     },
     {
-        path: '/rooms-list',
-        name: 'Rooms',
-        component: Rooms
+        path: '/book-list',
+        name: 'Books',
+        component: Books
     },
     {
         path: '/treatments-list',
