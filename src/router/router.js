@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory} from 'vue-router'
-import Viewlist from '../components/View-list.vue'
 import Mainview from '../components/Main-view.vue'
 import Login from '../components/Log-in.vue'
 import Createuser from '../components/Create-user.vue'
@@ -15,11 +14,6 @@ const routes = [
         path: '/main',
         name: 'Mainview',
         component: Mainview
-    },
-    {
-        path: '/view-list',
-        name: 'Viewlist',
-        component: Viewlist
     },
     {
         path: '/log-in',
