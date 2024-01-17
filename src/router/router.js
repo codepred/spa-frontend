@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory} from 'vue-router'
 import Mainview from '../components/Main-view.vue'
 import Login from '../components/Log-in.vue'
-import Createuser from '../components/Create-user.vue'
+import Signup from '../components/Sign-up.vue'
 import Checkout from '../components/Check-out.vue'
-import Books from '../components/Book-list.vue'
+import Treatments from '../components/Treatments-list.vue'
 
 const routes = [
     {
         path: '/',
-        redirect: '/create-user'
+        redirect: '/main'
     },
     {
         path: '/main',
@@ -21,9 +21,9 @@ const routes = [
         component: Login
     },
     {
-        path: '/create-user',
-        name: 'Createuser',
-        component: Createuser
+        path: '/sign-up',
+        name: 'Signup',
+        component: Signup
     },
     {
         path: '/check-out',
@@ -31,10 +31,10 @@ const routes = [
         component: Checkout
     },
     {
-        path: '/book-list',
-        name: 'Books',
-        component: Books
-    },
+        path: '/treatments-list',
+        name: 'Treatments',
+        component: Treatments
+    }
 ]
 
 

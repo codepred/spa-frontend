@@ -1,148 +1,266 @@
 <template>
-  <div style="margin-top: g">
-    <label class="title-text">
-      Historia wypożyczeń
-  </label>
-      <table class="table table-image">
-        <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">title</th>
-            <th scope="col">author</th>
-            <th scope="col">rentalDate</th>
-            <th scope="col">returnDate</th>
-            <th scope="col">Image</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="book in bookList" v-bind:key="book.id">
-            <td>{{book.id}}</td>
-             <td>{{book.book.title}}</td>
-             <td>{{book.book.author}}</td>
-             <td>{{book.rentalDate}}</td>
-             <td>{{book.returnDate}}</td>
-             <td class="w-25">
-              <img src="https://ale.pl/blog/wp-content/uploads/2018/09/Ebook1.blog_.png" class="img-fluid img-thumbnail" alt="Sheep">
+  <div id="app">
+    <div class="check-out-main"></div>
+    <br><br>
+    <div class="clear-cart" @click="clearCart()">Wyczyść koszyk</div> 
+    <table class="table table=striped" id="scrollHere"> 
+      <h2> Koszyk </h2>
+      <div v-if="!displayEmptyTreatmentsError" class="display-error"></div>
+      <div v-if="displayEmptyTreatmentsError" class="display-error"> Lista zabiegów jest pusta </div>
+      <div v-if="!displayWrongInputError" class="display-error-fake"> Niepoprawna data</div>
+      <div v-if="displayWrongInputError" class="display-error"> Niepoprawna data </div>
+      <tbody v-if="treatmentAdded.length !== 0">
+        <tr v-for="treatment in treatmentAdded" v-bind:key="treatment.id" >
+          <td>{{treatment.name}}</td>
+          <td>
+            <img class="number-add" @click="numberChange(treatment.id, 'minus')" src="../assets/img/minus-icon.svg" width="10" />
+            {{treatment.amount}} szt.
+            <img  class="number-add" @click="numberChange(treatment.id, 'plus')" src="../assets/img/plus-icon.svg" width="10" />
+          </td>
+          <td v-if="!dataSubmitted[treatment.id]">
+            <input 
+              v-if="!displayWrongInputFirst[treatment.id]"
+              type="date"
+              v-model="treatment.dateArrival"
+              max="2023-12-31"
+            />
+            <input 
+              v-if="displayWrongInputFirst[treatment.id]"
+              class="wrong-input"
+              type="date"
+              v-model="treatment.dateArrival"
+              max="2023-12-31"
+            />
+           </td> 
+            <td v-if="dataSubmitted[treatment.id]">
+              {{this.dateStored[treatment.id]}}
             </td>
-          </tr>
-        </tbody>
-      </table>   
+          <td>
+            <div v-if="!dataSubmitted[treatment.id]" class="accept-button" @click="setDate(treatment.id, treatment.dateArrival)"> Zatwierdź </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div v-if="treatmentAdded.length === 0">
+      Koszyk jest pusty
+    </div>
   </div>
+
 </template>
 
 <script>
-import BookService from '../services/BookService'
+/* eslint-disable */
+
+import ClientService from '../services/ClientService.js'
+
+export default {
+  data () {
+    return {
+      treatmentAdded: new Array(),
+      displayWrongInputError: false,
+      displayEmptyTreatmentsError: false,
+      todayVariable: 0,
+      displayWrongInput: new Array(8).fill(false),
+      displayWrongInputFirst: new Array(8).fill(false),
+      displayWrongInputSecond: new Array(8).fill(false),
+      dataSubmitted: new Array(8).fill(false),
+      displayWrongInputErrorRoom: false,
+      numberOfRooms: 0,
+      numberOfTreatments: 0,
+      dateStored: new Array(6)
+    }
+  },
+  methods: {
+    async receiveData() {
+
+      try {
+        var response = await fetch("http://54.37.138.92:8082/basket/list", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "*"
+        },
+        }).then(response => response.json())
+        this.treatmentAdded = response[0].productEntityList
+      }
+      catch (error) {
+        this.errorMessage = error;
+        console.error('There was an error!', error)
+        const stringError = String(error)
+      }
+    },
+    async updateAmount(itemId, action) {
+
+      try {
+        var response = await fetch("http://54.37.138.92:8082/basket/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "*",
+          "Access-Control-Allow-Headers": "*"
+        },
+        body: JSON.stringify({
+          token: localStorage.getItem('token', this.token),
+          id: itemId,
+          action: action
+        }),
+        }).then(response => response.json())
+      }
+      catch (error) {
+        this.errorMessage = error;
+        console.error('There was an error!', error)
+        const stringError = String(error)
+      }
+    },
+    numberChange(itemId, action) {
+
+          if (action === 'plus') {
+            this.updateAmount(itemId, 'plus')
+          }
+          else if (action === 'minus' && (this.treatmentAdded[itemId].amount-1) >= 0) {
+            this.updateAmount(itemId, 'minus')
+          }
+    },
+    todaysDate() {
+      const today = new Date()
+
+      const year = today.getFullYear()
+
+      const month = `${today.getMonth() + 1}`.padStart(2, "0")
+
+      const day = `${today.getDate()}`.padStart(2, "0")
+
+      const stringDate = [year, month, day].join("-") 
+
+      return stringDate
+    },
+    setDate(itemId, arrivalDate ) {
+
+      console.log(arrivalDate)
+      console.log(this.todaysDate())
+        if (arrivalDate < this.todaysDate()) {
+          this.displayWrongInputFirst[itemId] = true
+          this.displayWrongInputError = true
+          return
+        }
+        //console.log("rosik")
+        this.displayWrongInputError = false
+        this.displayWrongInputFirst[itemId] = false
+        this.displayWrongInputSecond[itemId] = false
+
+        this.dataSubmitted[itemId] = true
+        this.dateStored[itemId] = arrivalDate
 
 
-export default{
-data () {
-return {
-bookList: []
+
+    },
+    async clearCart() {
+      try {
+      var response = await fetch("http://54.37.138.92:8082/basket/delete", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "*",
+        "Access-Control-Allow-Headers": "*"
+      },})
+      }
+      catch (error) {
+        console.error('There was an error!', error)
+        const stringError = String(error)
+        this.displayServerError = true
+      }
+
+      this.receiveData()
+    },
+    created: {
+      getNow () {
+        const today = new Date();
+        const date = today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear()
+        this.todayVariable = date;
+      }
+    }
+  },
+  mounted:function() { 
+    //this.treatmentAdded = [{"id": 1, "name": "Sauna", "price": "39", "amount": 1 }]
+    //this.treatmentAdded = ClientService.getClients()
+    //this.receiveData()
+    //console.log(this.treatmentAdded.data)
+
+    if (!this.treatmentAdded) {
+      this.displayEmptyTreatmentsError = true
+    }
+  }
 }
-},
-methods: {
-getHistoryList() {
-console.log('TESTTT2222')
-BookService.getHistoryList().then((response) =>{
-console.log('TESTTT3333')
-console.log(response)
-this.bookList = response.data;
-})
-}
-},
-created: function () {
-console.log('TESTTT')
-this.getHistoryList()
-console.log('TESTTT111')
-},
-}
+  
 
 </script>
 
 <style>
-img {
-border-radius: 0.25rem;
+.second-date-class {
+  margin-left: 1%;
 }
-.btn {
-width: 50%;
-}
-h2 {
-display: block;
-font-size: 1.5em;
-margin-block-start: 0.83em;
-margin-block-end: 0.83em;
-margin-inline-start: 0px;
-margin-inline-end: 0px;
-font-weight: bold;
-}
-.price {
-width: 100%;
--ms-flex-item-align: start;
-align-self: flex-start;
+.number-add:hover {
+  cursor: pointer;
 
--ms-flex-pack: justify;
-justify-content: space-between;
-margin-bottom: 0.5em;
 }
-.listOfProducts{
-width: 100%;
-max-width: 1000px;
-margin: 0 auto;
-display: -ms-flexbox;
-display: flex;
--ms-flex-wrap: wrap;
-flex-wrap: wrap;
--ms-flex-pack: distribute;
-justify-content: space-around;
-padding: 0;
+.accept-button {
+  font-size: 15px;
 }
-.product{
-width: 300px;
-background-color: #fff;
-list-style: none;
-box-sizing: border-box;
-padding: 1em;
-margin: 1em 0;
-display: -ms-flexbox;
-display: flex;
-display: inline-block;
--ms-flex-direction: column;
-flex-direction: column;
--ms-flex-align: center;
-align-items: center;
-border-radius: 7px;
+.accept-button:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
-.title-text {
-font-size: 25px;
-padding-bottom: 3%;
+.check-out-main {
+  min-width: 300px;
 }
-h1 {
-font-size: 15px;
+div#app {
+  min-width: 670px;
 }
+.wrong-input {
+  box-shadow: 0 0 5px red;
+}
+  .clear-cart{
+    font-size: 15px;
+    float: right;
+    color: black;
+  }
+  .clear-cart:hover {
+    text-decoration: underline;
+    cursor: pointer;
 
-ul {  
-list-style-type: none;  
-font-weight: bold;  
-font-size: 20px;  
-}  
-
-label {
-margin-left: +10px;
+  }
+  .display-error {
+        color: #ff0000;
+        margin: auto;
+        border-radius: 2%;
+        display: inline-block;
+        text-align: center;
+        padding-bottom: 2%;
+        list-style-type: none;
+        background-color: white;
+    }
+    .display-error-fake {
+      color: white;
+    }
+  .choose-date {
+    padding-right: 1%;
+    padding-top: 1%;
+  }
+  .wrong-input {
+  box-shadow: 0 0 5px red;
 }
-
-.container {
-padding: 2rem 0rem;
-}
-
-h4 {
-margin: 2rem 0rem 1rem;
-}
-
-.table-image {
-td,th {
-vertical-align: middle;
-}
-}
-
-
+.display-error {
+        color: #ff0000;
+        margin: auto;
+        border-radius: 2%;
+        display: inline-block;
+        text-align: center;
+        padding-bottom: 2%;
+        list-style-type: none;
+        background-color: white;
+    }
 </style>

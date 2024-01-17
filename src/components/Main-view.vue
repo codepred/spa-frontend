@@ -2,14 +2,12 @@
   <div id="app">
     <div class="main-page"></div>
     <label class="title-text">
-      Witamy na stronie Księgarni
+      Witamy na stronie SPA Club 
     </label>
     <h1>
-      Skład Kulturalny to księgarnia, w której obok starannie dobranej oferty książek można znaleźć przedmioty artystyczne, grafikę oraz szeroką ofertę upominków. Księgarnia ma charakter ogólnoasortymentowy, ale szczególną uwagę poświęcamy młodym czytelnikom – wielu naszych klientów uważa, że mamy najlepszy wybór książek dla dzieci i młodzieży w Poznaniu! Oprócz książek oferujemy również kolorowanki, gry i zabawki. Aktualnie mieścimy się na Jeżycach, na ulicy Szamarzewskiego.
+      Doznaj pełnego odprężenia podczas relaksacyjnych pakietów Spa, łączących saunę, kąpiel piwna,  degustacje i sielski relaks na słomie. <br> <br>
 
-      Skład Kulturalny to jednak nie tylko sklep. To również miejsce spotkań i aktywnych działań. Organizujemy spotkania z autorami i ilustratorami książek, muzykami, twórcami, podróżnikami. Często zapraszamy dzieci na warsztaty literackie, plastyczne lub kulinarne. Czytamy z dziećmi i dla dzieci, organizujemy konkursy i wystawy.
-      
-      Skład Kulturalny prowadzony jest przez firmę Księgarnia Poznańska.
+      Fenomenalna atrakcja w centrum miasta. Idealna dla par i dla przyjaciół. Sauna, kąpiel, degustacja i relaks na słomie to świetna propozycja na deszczowe dni i leniwe wieczory po aktywnym dniu. 
     </h1>
     <br>
 
@@ -47,8 +45,5 @@ h1 {
   font-size: 15px;
 }
 
-label {
-    margin-left: +10px;
-}
 
 </style>

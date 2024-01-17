@@ -5,24 +5,24 @@
       <div class="container">
         <a class="navbar-brand float-left" target="_blank">
           <router-link to="/main">
-            <img src="./img/logo.jpg" width="100" heigh="100" />
+            <img src="./assets/img/spa_logo.jpg" width="100" heigh="100" />
           </router-link>
         </a>
         <ul class="nav-leftside">
           <li class="nav-items">
-            <router-link v-if="showLogoutButton" to="/book-list">Lista ksiazek</router-link>
+            <router-link to="/treatments-list" @click="clearSessionStorage">Produkty</router-link>
           </li>
         </ul>
         <ul class="nav-rightside">
           <li v-if="showLogoutButton" class="nav-items">
               <span class="btn-circle" v-if="displayNumberOfItems"> {{ numberOfItemsCart }} </span>
-              <router-link to="/check-out">Historia wypożyczeń</router-link>
+              <router-link to="/check-out" @click="clearSessionStorage">Koszyk</router-link>
           </li>
           <li class="nav-items">
             <router-link v-if="showLogoutButton" to="/log-in" @click="clearSessionStorage">Wyloguj</router-link>
           </li>
           <li class="nav-items">
-            <router-link v-if="!showLogoutButton" to="/log-in">Zaloguj</router-link>
+            <router-link v-if="!showLogoutButton" to="/log-in" @click="clearSessionStorage">Zaloguj</router-link>
           </li>
         </ul>
       </div>
@@ -30,7 +30,7 @@
     <!-- Main -->
     <div class="App" @mouseover="updateCartItemsNumber()" @click="updateCartItemsNumber()">
       <div class="vertical-center">
-        <img src="./img/ksiegarnia.jpg" />
+        <img src="./assets//img/spa_background.jpeg" />
         <div class="inner-block">
           <router-view />
         </div>
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+/* eslint-disable */ 
 
  export default {
 
@@ -52,41 +53,54 @@
       }
   },
     methods: {
-      updateCartItemsNumber() {
-        let tempItemsNumber = 0
-        if (!isNaN(parseInt(localStorage.getItem('numberOfRoomsAdded'), 10))) {
-          tempItemsNumber += parseInt(localStorage.getItem('numberOfRoomsAdded'), 10)
-        }
-        if (!isNaN(parseInt(localStorage.getItem('numberOfTreatmentsAdded'), 10))) {
-          tempItemsNumber += parseInt(localStorage.getItem('numberOfTreatmentsAdded'), 10)
-        }
+      async updateCartItemsNumber() {
+        /*
+        try {
+            var response = await fetch("https://localhost:8081/user/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "*",
+                    "Access-Control-Allow-Headers": "*"
+                },
+                body: JSON.stringify({
+                  token: localStorage.getItem('token')
+                })
+            }).then(response => response.json())
 
-        if (tempItemsNumber > 0) {
-          this.numberOfItemsCart = tempItemsNumber
-          this.displayNumberOfItems = true
-        }
-        else 
-          this.displayNumberOfItems = false
+          }
+          catch {
+
+          }*/
+
       },
       checkIfUserLoggedIn() {
         console.log(localStorage.getItem('token'))
-        if (localStorage.getItem('token') === null) {
+        if (!localStorage.getItem('token')) {
           this.showLogoutButton = false
           this.showSignUpButton = true
+          this.$router.push('/log-in')
         }
       },
       updateLoginButton() {
-            if (localStorage.getItem('token') === null) {
-          this.showLogoutButton = false
-          this.showSignUpButton = true
-        }
+            const checkURL = String(window.location.href)
+
+            if (checkURL.includes("log-in") || checkURL.includes("sign-up")) {
+              this.showLogoutButton = false
+            }
+            else {
+              this.showLogoutButton = true
+            }
           },
       clearSessionStorage () {
-             localStorage.removeItem('token');
+             //localStorage.removeItem('token');
           }
       },
     mounted:function() {
-        this.updateLoginButton()
+        //this.updateLoginButton()
+        this.checkIfUserLoggedIn()
+        
       },
  }
   
