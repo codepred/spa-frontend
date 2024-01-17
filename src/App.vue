@@ -1,34 +1,68 @@
+<script setup>
+import { ref } from 'vue'
+
+const storeNumberOfItemsCart = ref(localStorage.getItem('checkoutItems') || 0) 
+
+const updateLocalStorage = () => {
+  storeNumberOfItemsCart.value = localStorage.getItem('checkoutItems') || 0
+}
+
+</script>
+
 <template>
-  <div class="vue-template" @mouseover="updateLoginButton">
+  <div class="vue-template" @mouseover="updateLocalStorage" @click="updateLocalStorage">
     <!-- Navigation -->
     <nav class="navbar shadow bg-white rounded justify-content-between flex-nowrap flex-row fixed-top">
-      <div class="container">
-        <a class="navbar-brand float-left" target="_blank">
+      <div class="container display-desktop">
+        <a class="navbar-brand float-left" target="_blank" >
           <router-link to="/main">
             <img src="./assets/img/spa_logo.jpg" width="100" heigh="100" />
           </router-link>
         </a>
         <ul class="nav-leftside">
           <li class="nav-items">
-            <router-link to="/treatments-list" @click="clearSessionStorage">Produkty</router-link>
+            <router-link to="/treatments-list">Usługi</router-link>
           </li>
         </ul>
         <ul class="nav-rightside">
           <li v-if="showLogoutButton" class="nav-items">
-              <span class="btn-circle" v-if="displayNumberOfItems"> {{ numberOfItemsCart }} </span>
-              <router-link to="/check-out" @click="clearSessionStorage">Koszyk</router-link>
+            <div style="display: flex; justify-content: space-between;">
+              <router-link to="/check-out">Koszyk</router-link>
+              <span class="btn-circle"> {{  storeNumberOfItemsCart }} </span>
+            </div>
+          </li>
+          <li class="nav-items display-medium">
+            <router-link v-if="showLogoutButton" to="/log-in" @click="clearSessionStorage">Wyloguj</router-link>
+          </li>
+          <li class="nav-items">
+            <router-link v-if="!showLogoutButton" to="/log-in">Zaloguj</router-link>
+          </li>
+        </ul>
+      </div>
+      <div class="container display-mobile">
+        <ul class="">
+          <li class="nav-items">
+            <router-link to="/treatments-list">Usługi</router-link>
+          </li>
+        </ul>
+        <ul class="">
+          <li v-if="showLogoutButton" class="nav-items">
+            <div style="display: flex; justify-content: space-between;">
+              <router-link to="/check-out">Koszyk</router-link>
+              <span class="btn-circle"> {{  storeNumberOfItemsCart }} </span>
+            </div>
           </li>
           <li class="nav-items">
             <router-link v-if="showLogoutButton" to="/log-in" @click="clearSessionStorage">Wyloguj</router-link>
           </li>
           <li class="nav-items">
-            <router-link v-if="!showLogoutButton" to="/log-in" @click="clearSessionStorage">Zaloguj</router-link>
+            <router-link v-if="!showLogoutButton" to="/log-in">Zaloguj</router-link>
           </li>
         </ul>
       </div>
     </nav>
     <!-- Main -->
-    <div class="App" @mouseover="updateCartItemsNumber()" @click="updateCartItemsNumber()">
+    <div class="App" >
       <div class="vertical-center">
         <img src="./assets//img/spa_background.jpeg" />
         <div class="inner-block">
@@ -48,35 +82,12 @@
     return {
       showLogoutButton: true,
       showSignUpButton: false,
-      numberOfItemsCart: 0,
+      numberOfItemsCart: window.numberOfItemsCart,
       displayNumberOfItems: false,
       }
   },
     methods: {
-      async updateCartItemsNumber() {
-        /*
-        try {
-            var response = await fetch("https://localhost:8081/user/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                    "Access-Control-Allow-Methods": "*",
-                    "Access-Control-Allow-Headers": "*"
-                },
-                body: JSON.stringify({
-                  token: localStorage.getItem('token')
-                })
-            }).then(response => response.json())
-
-          }
-          catch {
-
-          }*/
-
-      },
       checkIfUserLoggedIn() {
-        console.log(localStorage.getItem('token'))
         if (!localStorage.getItem('token')) {
           this.showLogoutButton = false
           this.showSignUpButton = true
@@ -94,13 +105,11 @@
             }
           },
       clearSessionStorage () {
-             //localStorage.removeItem('token');
+             localStorage.removeItem('token');
           }
       },
     mounted:function() {
-        //this.updateLoginButton()
-        this.checkIfUserLoggedIn()
-        
+        this.checkIfUserLoggedIn()      
       },
  }
   
@@ -118,18 +127,14 @@
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
     border-bottom-left-radius: 50%;
-    position: absolute;
-    right: 327px;
     background-color: orange;
     color: white;
-    display: -ms-flexbox;
     display: flex;
-    -ms-flex-align: center;
     align-items: center;
-    -ms-flex-pack: center;
     justify-content: center;
     font-size: 15px;
     border: 1px;
+    padding: 12px;
 }
 
 #app {
@@ -154,10 +159,10 @@
   text-align: center;
   top: 35%;
   left: 50%;
-  width: fit-content;
+  width: 100%;
   min-width: 300px;
+  max-width: 800px;
   margin-bottom: 30px;
-  margin-left: 80px;
   transform: translate(-50%, -50%);
 }
 
@@ -176,5 +181,24 @@
   padding-right: 10%;
   padding-top: 3%;
 }
+
+@media (max-width: 400px) {
+  .display-desktop {
+    display: none !important;
+  }
+}
+
+@media (min-width: 401px) {
+  .display-mobile {
+    display: none !important;
+  }
+}
+
+@media (max-width: 625px) {
+  .display-medium {
+    display: none !important;
+  }
+}
+
 
 </style>

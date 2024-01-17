@@ -59,10 +59,11 @@ export default {
     },
 
     async login(e) {
-      this.loginStatus = true
       e.preventDefault();
 
-      // .then(response => response.json())
+      this.loginStatus = true
+      this.displayServerError = false
+      this.displayIncorrectPassword = false
 
       if (this.username === 'admin' && this.password === 'Test123#') {
         this.$router.push('/Main')
@@ -70,50 +71,9 @@ export default {
       }
       else {
         this.displayIncorrectPassword = true
-        this.loginStatus = false
-        this.displayServerError = false
       }
 
-
-      // try {
-      //     var response = await fetch("http://54.37.138.92:8082/user/login", {
-      //         method: "POST",
-      //         headers: {
-      //             "Content-Type": "application/json",
-      //             "Access-Control-Allow-Origin": "*",
-      //             "Access-Control-Allow-Methods": "*",
-      //             "Access-Control-Allow-Headers": "*"
-      //         },
-      //         body: JSON.stringify({
-      //             email: this.username,
-      //             password: this.password
-      //         })
-      //     })
-      // }
-      // catch (error) {
-      //         this.errorMessage = error;
-      //         console.error('There was an error!', error)
-      //         const stringError = String(error)
-
-      //     if (stringError.includes("Failed to fetch")) {
-      //         this.displayServerError = true
-      //         this.loginStatus = false
-      //         this.displayIncorrectPassword = false
-      //     }
-      //     else {
-      //         this.displayIncorrectPassword = true
-      //         this.loginStatus = false
-      //         this.displayServerError = false
-      //     }
-      //    return
-      // }
-      // localStorage.setItem('token', '34ljk5nbmvxc@#!^*$%a')
-
-      // if(response !== 'undefined'){
-      //     //this.token = response.token
-      //     //localStorage.setItem('token', this.token);
-      //     this.$router.push('/Main') 
-      // }
+      this.loginStatus = false
     }
   }
 }
