@@ -46,7 +46,7 @@
     border-radius: 15px;
     transition: all .3s;
     top: 40%;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 70%;
   }
   .vertical-center .form-control:focus {

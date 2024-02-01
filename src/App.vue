@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 
-const storeNumberOfItemsCart = ref(localStorage.getItem('checkoutItems') || 0) 
+const storeNumberOfItemsCart = ref(localStorage.getItem('checkoutItems') || 0)
 
 const updateLocalStorage = () => {
   storeNumberOfItemsCart.value = localStorage.getItem('checkoutItems') || 0
@@ -14,7 +14,7 @@ const updateLocalStorage = () => {
     <!-- Navigation -->
     <nav class="navbar shadow bg-white rounded justify-content-between flex-nowrap flex-row fixed-top">
       <div class="container display-desktop">
-        <a class="navbar-brand float-left" target="_blank" >
+        <a class="navbar-brand float-left" target="_blank">
           <router-link to="/main">
             <img src="./assets/img/spa_logo.jpg" width="100" heigh="100" />
           </router-link>
@@ -28,7 +28,7 @@ const updateLocalStorage = () => {
           <li v-if="showLogoutButton" class="nav-items">
             <div style="display: flex; justify-content: space-between;">
               <router-link to="/check-out">Koszyk</router-link>
-              <span class="btn-circle"> {{  storeNumberOfItemsCart }} </span>
+              <span class="btn-circle"> {{ storeNumberOfItemsCart }} </span>
             </div>
           </li>
           <li class="nav-items display-medium">
@@ -49,7 +49,7 @@ const updateLocalStorage = () => {
           <li v-if="showLogoutButton" class="nav-items">
             <div style="display: flex; justify-content: space-between;">
               <router-link to="/check-out">Koszyk</router-link>
-              <span class="btn-circle"> {{  storeNumberOfItemsCart }} </span>
+              <span class="btn-circle"> {{ storeNumberOfItemsCart }} </span>
             </div>
           </li>
           <li class="nav-items">
@@ -62,7 +62,7 @@ const updateLocalStorage = () => {
       </div>
     </nav>
     <!-- Main -->
-    <div class="App" >
+    <div class="App">
       <div class="vertical-center">
         <img src="./assets//img/spa_background.jpeg" />
         <div class="inner-block">
@@ -74,9 +74,9 @@ const updateLocalStorage = () => {
 </template>
 
 <script>
-/* eslint-disable */ 
+/* eslint-disable */
 
- export default {
+export default {
 
   data() {
     return {
@@ -84,35 +84,57 @@ const updateLocalStorage = () => {
       showSignUpButton: false,
       numberOfItemsCart: window.numberOfItemsCart,
       displayNumberOfItems: false,
-      }
+    }
   },
-    methods: {
-      checkIfUserLoggedIn() {
-        if (!localStorage.getItem('token')) {
-          this.showLogoutButton = false
-          this.showSignUpButton = true
-          this.$router.push('/log-in')
-        }
-      },
-      updateLoginButton() {
-            const checkURL = String(window.location.href)
+  methods: {
+    checkIfUserLoggedIn() {
+      if (!localStorage.getItem('token')) {
+        this.showLogoutButton = false
+        this.showSignUpButton = true
+        this.$router.push('/log-in')
+      }
+      else {
+        this.showLogoutButton = true
+      }
+    },
+    updateLoginButton() {
+      const checkURL = String(window.location.href)
 
-            if (checkURL.includes("log-in") || checkURL.includes("sign-up")) {
-              this.showLogoutButton = false
-            }
-            else {
-              this.showLogoutButton = true
-            }
-          },
-      clearSessionStorage () {
-             localStorage.removeItem('token');
-          }
-      },
-    mounted:function() {
-        this.checkIfUserLoggedIn()      
-      },
- }
-  
+      if (checkURL.includes("log-in") || checkURL.includes("sign-up")) {
+        this.showLogoutButton = false
+      }
+      else {
+        this.showLogoutButton = true
+      }
+    },
+    clearSessionStorage() {
+      localStorage.removeItem('token');
+      this.showLogoutButton = false
+    },
+    async requestMediaAccess() {
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+          console.log('Media stream acquired:', stream);
+        } catch (error) {
+          console.error('Error accessing media devices:', error);
+        }
+      } else {
+        console.error('getUserMedia is not supported in this environment');
+      }
+    },
+  },
+  mounted: function () {
+    this.checkIfUserLoggedIn()
+    this.requestMediaAccess()
+  },
+  watch: {
+    $route: function () {
+      this.checkIfUserLoggedIn()
+    }
+  }
+}
+
 
 
 </script>
@@ -120,21 +142,21 @@ const updateLocalStorage = () => {
 
 <style>
 .btn-circle {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border-top-left-radius: 50%;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    border-bottom-left-radius: 50%;
-    background-color: orange;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    border: 1px;
-    padding: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  background-color: orange;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  border: 1px;
+  padding: 12px;
 }
 
 #app {
@@ -170,6 +192,7 @@ const updateLocalStorage = () => {
   display: flex;
   float: left;
 }
+
 .nav-rightside {
   display: flex;
   float: right;
@@ -199,6 +222,4 @@ const updateLocalStorage = () => {
     display: none !important;
   }
 }
-
-
 </style>

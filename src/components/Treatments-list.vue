@@ -131,33 +131,21 @@ export default {
   },
   methods: {
     addToCart(name) {
-      // Get the current count from localStorage and parse it to an integer
       this.numberOfItemsInCart = parseInt(localStorage.getItem('checkoutItems')) || 0;
 
-      // Increment the count
       this.numberOfItemsInCart++;
 
+      const selectedTreatment = this.treatments.find(item => item.name === name);
+      const existingTreatment = this.treatmentAdded.find(item => item.name === name);
 
-    // Get the selected treatment from treatments array
-    const selectedTreatment = this.treatments.find(item => item.name === name);
+      if (existingTreatment) {
+        existingTreatment.amount++;
+      } else {
+        this.treatmentAdded.push({ ...selectedTreatment, amount: 1 });
+      }
 
-    // Check if the treatment is already in the cart
-    const existingTreatment = this.treatmentAdded.find(item => item.name === name);
-
-    if (existingTreatment) {
-      // If the treatment is already in the cart, increment the 'pieces' value
-      existingTreatment.amount++;
-    } else {
-      // If the treatment is not in the cart, add it with 'pieces' set to 1
-      this.treatmentAdded.push({ ...selectedTreatment, amount: 1 });
-    }
-
-    // Update the localStorage with the new count and list of treatments
-    localStorage.setItem('checkoutItems', this.numberOfItemsInCart);
-    localStorage.setItem('listOfTreatments', JSON.stringify(this.treatmentAdded));
-
-    // Log the updated list of treatments
-    console.log(this.treatmentAdded);
+      localStorage.setItem('checkoutItems', this.numberOfItemsInCart);
+      localStorage.setItem('listOfTreatments', JSON.stringify(this.treatmentAdded));
     },
   }
 }

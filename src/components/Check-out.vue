@@ -2,7 +2,7 @@
   <div id="app">
     <div class="check-out-main"></div>
     <br><br>
-    <div class="clear-cart" @click="clearCart()">Wyczyść koszyk</div>
+    <div class="clear-cart" v-if="treatmentAdded.length !== 0" @click="clearCart()">Wyczyść koszyk</div>
     <div style="margin-top: 30px; width: 100%; text-align: center;"> <h2> Koszyk</h2> </div>
     <table class="table table=striped" id="scrollHere">
       <div v-if="!displayEmptyTreatmentsError" class="display-error"></div>
