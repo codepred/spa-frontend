@@ -35,6 +35,17 @@
     justify-content: center;
     flex-direction: column;    
   }
+  .redirect-href {
+    color: #6565E6;
+    text-decoration: none;
+  }
+  
+  .redirect-href:hover {
+    color: #6565E6;
+    /* background: white; */
+    text-decoration: underline;
+    cursor: pointer;
+  }
   .inner-block {
     display: table-column;
     min-width: 300px;

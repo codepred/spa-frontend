@@ -111,22 +111,9 @@ export default {
       localStorage.removeItem('token');
       this.showLogoutButton = false
     },
-    async requestMediaAccess() {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-          console.log('Media stream acquired:', stream);
-        } catch (error) {
-          console.error('Error accessing media devices:', error);
-        }
-      } else {
-        console.error('getUserMedia is not supported in this environment');
-      }
-    },
   },
   mounted: function () {
     this.checkIfUserLoggedIn()
-    this.requestMediaAccess()
   },
   watch: {
     $route: function () {

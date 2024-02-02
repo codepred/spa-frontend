@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory} from 'vue-router'
 import Mainview from '../components/Main-view.vue'
+import ProfileView from '../components/Profile-tab.vue'
 import Login from '../components/Log-in.vue'
 import Signup from '../components/Sign-up.vue'
 import Checkout from '../components/Check-out.vue'
@@ -14,6 +15,11 @@ const routes = [
         path: '/main',
         name: 'Mainview',
         component: Mainview
+    },
+    {
+        path: '/profile',
+        name: 'ProfileView',
+        component: ProfileView
     },
     {
         path: '/log-in',

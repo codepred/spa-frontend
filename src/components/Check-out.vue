@@ -33,6 +33,9 @@
         </tr>
       </tbody>
     </table>
+    <div @click="this.$router.push('/profile')" class="redirect-href">
+      Nagraj wiadomość dla pracowników spa
+    </div>
     <div v-if="treatmentAdded.length === 0">
       Koszyk jest pusty
     </div>
